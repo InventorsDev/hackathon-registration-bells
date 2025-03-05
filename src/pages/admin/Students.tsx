@@ -22,7 +22,7 @@ interface Registration {
 
 export function Participants() {
     const [students, setStudents] = useState<Registration[]>([]);
-    const [filter, setFilter] = useState<'all' | '100' | '200'>('all');
+    const [filter, setFilter] = useState<'all' | '100' | '200' | 'individual' | 'team'>('all');
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedStudent, setSelectedStudent] = useState<Registration | null>(null);
 

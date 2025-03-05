@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { FaClock, FaMapMarkerAlt, FaLaptopCode, FaUserGraduate, FaLock, FaWhatsapp, FaCode, FaTrophy, FaUsers } from 'react-icons/fa';
+import { FaClock, FaMapMarkerAlt, FaLock, FaWhatsapp, FaCode, FaTrophy, FaUsers } from 'react-icons/fa';
 import { db } from '../services/firebase';
 import { toast } from 'react-hot-toast';
 import { generateRegistrationId } from '../utils/helpers';
@@ -63,7 +63,6 @@ export function HackathonRegistration() {
         areasOfAssistance: false
     });
 
-    const [courseInput, setCourseInput] = useState({ courseCode: '', topics: '' });
 
     const getFieldError = (field: keyof typeof touched) => {
         if (touched[field] && !formData[field]) {
@@ -72,22 +71,7 @@ export function HackathonRegistration() {
         return '';
     };
 
-    const handleAddCourse = () => {
-        if (courseInput.courseCode.trim() && courseInput.topics.trim()) {
-            setFormData(prev => ({
-                ...prev,
-                areasOfAssistance: [...prev.areasOfAssistance, { ...courseInput }]
-            }));
-            setCourseInput({ courseCode: '', topics: '' });
-        }
-    };
 
-    const handleRemoveCourse = (index: number) => {
-        setFormData(prev => ({
-            ...prev,
-            areasOfAssistance: prev.areasOfAssistance.filter((_, i) => i !== index)
-        }));
-    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -138,9 +122,7 @@ export function HackathonRegistration() {
         }
     };
 
-    const handleMessage = (message: string) => {
-        console.log('Message from chatbot:', message);
-    };
+
 
     // Add this array of slider images
     const sliderImages = [
@@ -152,7 +134,6 @@ export function HackathonRegistration() {
     ];
 
     // Add this for the QR code
-    const registrationUrl = window.location.href;
 
     return (
         <>
