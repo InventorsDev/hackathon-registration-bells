@@ -151,15 +151,7 @@ export function HackathonRegistration() {
                                 <div className="absolute inset-0 bg-gradient-to-br from-black via-black to-green-900 opacity-90"></div>
                                 <div className="absolute inset-0 bg-[url('/circuit-pattern.svg')] opacity-20"></div>
                                 <div className="absolute inset-0 flex flex-col items-center justify-center">
-                                    {/* Bells University Logo First */}
-                                    <motion.div
-                                        initial={{ scale: 0.5, opacity: 0 }}
-                                        animate={{ scale: 1, opacity: 1 }}
-                                        transition={{ duration: 0.7 }}
-                                        className="mb-4"
-                                    >
-                                        <img src="/bells-logo.png" alt="Bells University Logo" className="w-32 h-32" />
-                                    </motion.div>
+
 
                                     {/* NACOS Logo */}
                                     <motion.div
@@ -225,7 +217,7 @@ export function HackathonRegistration() {
                         transition={{ delay: showIntro ? 3.2 : 0, duration: 0.5 }}
                     >
                         <div className="flex items-start gap-4">
-                            <div className=" text-white flex md:flex-row  flex-col gap-3 pl-2 pr-4 items-center  bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 ">
+                            <div className=" text-white flex md:flex-row  w-[9rem] flex-col gap-3 pl-2 pr-2 py-2 md:pr-4  items-center  bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 ">
                                 <img src="/bells-logo.png" alt="Bells University Logo" className=" object-cover size-[4rem]" />
                                 <h1>X</h1>
                                 <img src="/nacos-logo.png" alt="Bells University Logo" className=" object-cover size-[2rem]" />
@@ -539,60 +531,72 @@ export function HackathonRegistration() {
                                     </button>
                                 </form>
 
-                                {/* QR Code Section */}
-                                <div className="mt-12 pt-8 border-t border-white/10 flex flex-col items-center">
-                                    <h3 className="text-white text-lg font-semibold mb-4">Scan to Register</h3>
-                                    <div className="bg-white p-3 rounded-xl">
-                                        <img
-                                            src="/qr-code.png"
-                                            alt="Registration QR Code"
-                                            className="w-[150px] h-[150px]"
-                                        />
-                                    </div>
-                                    <p className="text-green-300 text-sm mt-4 text-center">
-                                        Share this QR code with your friends to join the hackathon!
-                                    </p>
-                                </div>
+
                             </div>
                         </motion.div>
                     </div>
                     {/*  */}
 
                     {/* Footer with QR Code */}
-                    <div className="mt-16 pt-8 border-t border-white/10">
+                    <motion.div
+                        className="mt-16 pt-8 border-t border-white/10"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: showIntro ? 3.8 : 0.6, duration: 0.5 }}
+                    >
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
-                            <div className="md:col-span-2">
+                            <div className="md:col-span-1">
                                 <h3 className="text-white text-xl font-bold mb-4">Join the NACOS Hackathon Community</h3>
                                 <p className="text-white/70 mb-4">
-                                    Scan the QR code to register or share with your friends. Be part of Nigeria's largest student hackathon and showcase your innovation skills!
+                                    Be part of Nigeria's largest student hackathon and showcase your innovation skills! Connect with like-minded students, mentors, and industry professionals.
                                 </p>
-                                <div className="flex flex-wrap gap-4">
-                                    <a href="#" className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 transition-colors px-4 py-2 rounded-lg text-white">
-                                        <FaWhatsapp />
-                                        <span>Join WhatsApp</span>
+                                <div className="flex flex-wrap gap-4 mt-6">
+                                    <a href="#" className="flex items-center gap-2 bg-white/10 hover:bg-white/20 transition-colors px-4 py-2 rounded-lg text-white">
+                                        <FaWhatsapp className="text-green-400" />
+                                        <span>WhatsApp Group</span>
                                     </a>
-                                    <a href="#" className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 transition-colors px-4 py-2 rounded-lg text-white">
-                                        <FaCode />
-                                        <span>View Past Projects</span>
-                                    </a>
+
                                 </div>
                             </div>
-                            <div className="flex justify-center md:justify-end">
-                                <div className="bg-white p-4 rounded-xl">
+                            <div className="md:col-span-1 flex flex-col items-center">
+                                <div className="bg-white p-3 rounded-xl shadow-lg">
                                     <img
-                                        src="/qr-code.png"
+                                        src="/qrcode.png"
                                         alt="Registration QR Code"
-                                        className="w-[180px] h-[180px]"
+                                        className="w-[150px] h-[150px]"
                                     />
                                 </div>
+                                <p className="text-green-300 text-sm mt-4 text-center">
+                                    Scan to share with friends
+                                </p>
                             </div>
                         </div>
-                        <div className="mt-8 pt-8 border-t border-white/10 text-center">
-                            <p className="text-white/50 text-sm">
-                                © {new Date().getFullYear()} NACOS Bells University Chapter. All rights reserved.
-                            </p>
+
+                        <div className="mt-10 pt-6 border-t bg-[black] border-white/10 flex flex-col md:flex-row justify-between items-center">
+                            <div className="flex items-center gap-3 mb-4 md:mb-0">
+                                <img
+                                    src="/logo.png"
+                                    alt="Inventors Logo"
+                                    className="w-8 h-8 object-contain"
+                                />
+                                <span className="text-white/70 text-sm">© 2025 NACOS Hackathon</span>
+                            </div>
+
+                            <div className="flex items-center">
+                                <span className="text-white/50 text-sm mr-2">Made with</span>
+                                <span className="text-red-500">❤️</span>
+                                <span className="text-white/50 text-sm mx-2">by</span>
+                                <a
+                                    href="https://github.com/Olaoluwa-Adenle"
+                                    className="text-green-400 hover:text-green-300 transition-colors text-sm font-medium"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    INVENTORS COMMUNITY
+                                </a>
+                            </div>
                         </div>
-                    </div>
+                    </motion.div>
                 </div>
 
                 {/* <ChatBot onSendMessage={handleMessage} /> */}
