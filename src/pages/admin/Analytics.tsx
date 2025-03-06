@@ -387,7 +387,7 @@ export function Analytics() {
                         <p className="text-sm text-gray-600">Overview of registration statistics and insights</p>
                     </div>
                     <a
-                        href="/admin/students"
+                        href="/"
                         className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 w-full sm:w-auto justify-center sm:justify-start"
                     >
                         Back to Registration
