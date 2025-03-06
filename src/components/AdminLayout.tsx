@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { FaChartBar, FaUsers, FaCalendarAlt, FaCog, FaBars, FaTimes, FaEnvelope } from 'react-icons/fa';
+import { FaChartBar, FaUsers, FaCog, FaBars, FaTimes, FaEnvelope, FaUserFriends, FaCode } from 'react-icons/fa';
 import { useState, useEffect } from 'react';
 import { collection, query, where, onSnapshot } from 'firebase/firestore';
 import { db } from '../services/firebase';
@@ -11,9 +11,10 @@ interface MenuItem {
 }
 
 const menuItems: MenuItem[] = [
-    { name: 'Dashboard', icon: <FaChartBar />, path: '/admin' },
+    { name: 'Dashboard', icon: <FaChartBar />, path: '/admin/analytics' },
     { name: 'Participants', icon: <FaUsers />, path: '/admin/participants' },
-    { name: 'Schedule', icon: <FaCalendarAlt />, path: '/admin/schedule' },
+    { name: 'Teams', icon: <FaUserFriends />, path: '/admin/teams' },
+    { name: 'Projects', icon: <FaCode />, path: '/admin/projects' },
     { name: 'Messages', icon: <FaEnvelope />, path: '/admin/messages' },
     { name: 'Settings', icon: <FaCog />, path: '/admin/settings' },
 ];

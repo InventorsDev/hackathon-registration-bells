@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import { FaClock, FaMapMarkerAlt, FaLock, FaWhatsapp, FaCode, FaTrophy, FaUsers } from 'react-icons/fa';
+import { FaClock, FaMapMarkerAlt, FaLock, FaWhatsapp, FaCode, FaTrophy, FaUsers, FaTwitter, FaInstagram, FaLinkedin, FaGithub } from 'react-icons/fa';
 import { db } from '../services/firebase';
 import { toast } from 'react-hot-toast';
 import { generateRegistrationId } from '../utils/helpers';
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { addDoc, collection, serverTimestamp, doc, getDoc } from 'firebase/firestore';
 import { LoginPopup } from './LoginPopup';
 import { RegistrationSuccessPopup } from './RegistrationSuccessPopup';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -15,7 +15,11 @@ interface RegistrationFormData {
     email: string;
     phoneNumber: string;
     institution: string;
-    level: '100' | '200' | '';
+    college: string;
+    otherCollege?: string;
+    department: string;
+    matricNumber: string;
+    level: '100' | '200' | '300' | '400' | '500' | '';
     teamName: string;
     teamSize: string;
     projectIdea: string;
@@ -34,7 +38,11 @@ export function HackathonRegistration() {
         fullName: '',
         email: '',
         phoneNumber: '',
-        institution: '',
+        institution: 'Bells University of Technology',
+        college: '',
+        otherCollege: '',
+        department: '',
+        matricNumber: '',
         level: '',
         teamName: '',
         teamSize: '1',
@@ -48,6 +56,26 @@ export function HackathonRegistration() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [showIntro, setShowIntro] = useState(true);
 
+    // Add settings state
+    const [settings, setSettings] = useState({
+        eventDate: 'Coming Soon...',
+        eventTime: '',
+        venue: 'Bells University of Technology',
+        venueAddress: 'Ota, Ogun-state, Nigeria.',
+        themes: ['FinTech Solutions', 'HealthTech Innovations', 'EdTech Platforms', 'Sustainable Development'],
+        prizes: ['1st Place: ₦500,000', '2nd Place: ₦300,000', '3rd Place: ₦150,000', '+ Internship Opportunities'],
+        contactEmail: 'nacos.hackathon@example.com',
+        contactPhone: '+234 800 NACOS HACK',
+        registrationEnabled: true,
+        whatsappLink: '#',
+        socialLinks: {
+            twitter: '#',
+            instagram: '#',
+            linkedin: '#',
+            github: '#'
+        }
+    });
+
     // Handle intro animation timing
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -57,12 +85,32 @@ export function HackathonRegistration() {
         return () => clearTimeout(timer);
     }, []);
 
+    // Fetch settings from Firebase
+    useEffect(() => {
+        const fetchSettings = async () => {
+            try {
+                const settingsDoc = await getDoc(doc(db, 'settings', 'hackathon'));
+                if (settingsDoc.exists()) {
+                    setSettings(prevSettings => ({
+                        ...prevSettings,
+                        ...settingsDoc.data()
+                    }));
+                }
+            } catch (error) {
+                console.error('Error fetching settings:', error);
+            }
+        };
+
+        fetchSettings();
+    }, []);
+
     const [touched, setTouched] = useState({
-        institution: false,
+        college: false,
+        department: false,
+        matricNumber: false,
         level: false,
         areasOfAssistance: false
     });
-
 
     const getFieldError = (field: keyof typeof touched) => {
         if (touched[field] && !formData[field]) {
@@ -71,22 +119,23 @@ export function HackathonRegistration() {
         return '';
     };
 
-
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSubmitting(true);
 
         try {
             const regId = generateRegistrationId();
-            const registrationData = {
+
+            // If "Others" is selected, use the otherCollege value
+            const finalFormData = {
                 ...formData,
+                college: formData.college === 'Others' ? formData.otherCollege : formData.college,
                 registrationId: regId,
                 verified: false,
                 timestamp: serverTimestamp()
             };
 
-            await addDoc(collection(db, 'registrations'), registrationData);
+            await addDoc(collection(db, 'registrations'), finalFormData);
 
             if (formData.message) {
                 await addDoc(collection(db, 'messages'), {
@@ -105,7 +154,11 @@ export function HackathonRegistration() {
                 fullName: '',
                 email: '',
                 phoneNumber: '',
-                institution: '',
+                institution: 'Bells University of Technology',
+                college: '',
+                otherCollege: '',
+                department: '',
+                matricNumber: '',
                 level: '',
                 teamName: '',
                 teamSize: '1',
@@ -121,8 +174,6 @@ export function HackathonRegistration() {
             setIsSubmitting(false);
         }
     };
-
-
 
     // Add this array of slider images
     const sliderImages = [
@@ -217,7 +268,7 @@ export function HackathonRegistration() {
                         transition={{ delay: showIntro ? 3.2 : 0, duration: 0.5 }}
                     >
                         <div className="flex items-start gap-4">
-                            <div className=" text-white flex md:flex-row  w-[9rem] flex-col gap-3 pl-2 pr-2 py-2 md:pr-4  items-center  bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 ">
+                            <div className=" text-white flex md:flex-row  md:w-[11rem] w-[9rem] flex-col gap-3 pl-2 md:pr- pr-2 py-2 md:pr-4  items-center  bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 ">
                                 <img src="/bells-logo.png" alt="Bells University Logo" className=" object-cover size-[4rem]" />
                                 <h1>X</h1>
                                 <img src="/nacos-logo.png" alt="Bells University Logo" className=" object-cover size-[2rem]" />
@@ -237,7 +288,7 @@ export function HackathonRegistration() {
                         </div>
                         <button
                             onClick={() => setIsLoginOpen(true)}
-                            className="hidden sm:flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors shadow-lg"
+                            className="fixed bottom-4 right-4 z-50 flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors shadow-lg"
                         >
                             <FaLock className="text-sm" />
                             <span className="font-medium">Admin</span>
@@ -276,9 +327,8 @@ export function HackathonRegistration() {
                                         </div>
                                         <div>
                                             <h3 className="font-semibold text-lg">Date & Time</h3>
-                                            <p className="text-white/80 text-sm">Coming Soon...</p>
-                                            {/* <p className="text-white/80 text-sm">November 10-12, 2025</p> */}
-                                            {/* <p className="text-white/80 text-sm">9:00 AM - 5:00 PM</p> */}
+                                            <p className="text-white/80 text-sm">{settings.eventDate}</p>
+                                            {settings.eventTime && <p className="text-white/80 text-sm">{settings.eventTime}</p>}
                                         </div>
                                     </div>
 
@@ -288,8 +338,8 @@ export function HackathonRegistration() {
                                         </div>
                                         <div>
                                             <h3 className="font-semibold text-lg">Venue</h3>
-                                            <p className="text-white/80 text-sm">Bells University of Technology</p>
-                                            <p className="text-white/80 text-sm">Ota, Ogun-state, Nigeria.</p>
+                                            <p className="text-white/80 text-sm">{settings.venue}</p>
+                                            <p className="text-white/80 text-sm">{settings.venueAddress}</p>
                                         </div>
                                     </div>
 
@@ -302,10 +352,9 @@ export function HackathonRegistration() {
                                         </div>
                                         <div>
                                             <h3 className="font-semibold text-lg">Themes</h3>
-                                            <p className="text-white/80 text-sm">FinTech Solutions</p>
-                                            <p className="text-white/80 text-sm">HealthTech Innovations</p>
-                                            <p className="text-white/80 text-sm">EdTech Platforms</p>
-                                            <p className="text-white/80 text-sm">Sustainable Development</p>
+                                            {settings.themes.map((theme, index) => (
+                                                <p key={index} className="text-white/80 text-sm">{theme}</p>
+                                            ))}
                                         </div>
                                     </div>
 
@@ -315,10 +364,9 @@ export function HackathonRegistration() {
                                         </div>
                                         <div>
                                             <h3 className="font-semibold text-lg">Prizes</h3>
-                                            <p className="text-white/80 text-sm">1st Place: ₦500,000</p>
-                                            <p className="text-white/80 text-sm">2nd Place: ₦300,000</p>
-                                            <p className="text-white/80 text-sm">3rd Place: ₦150,000</p>
-                                            <p className="text-white/80 text-sm">+ Internship Opportunities</p>
+                                            {settings.prizes.map((prize, index) => (
+                                                <p key={index} className="text-white/80 text-sm">{prize}</p>
+                                            ))}
                                         </div>
                                     </div>
 
@@ -340,8 +388,8 @@ export function HackathonRegistration() {
 
                                 <div className="mt-8 pt-6 border-t border-white/20">
                                     <h3 className="font-semibold text-lg mb-3">Contact Us</h3>
-                                    <p className="text-white/80 text-sm mb-2">Email: nacos.hackathon@example.com</p>
-                                    <p className="text-white/80 text-sm">Phone: +234 800 NACOS HACK</p>
+                                    <p className="text-white/80 text-sm mb-2">Email: {settings.contactEmail}</p>
+                                    <p className="text-white/80 text-sm">Phone: {settings.contactPhone}</p>
                                 </div>
                             </div>
                         </motion.div>
@@ -413,14 +461,79 @@ export function HackathonRegistration() {
                                             <input
                                                 type="text"
                                                 value={formData.institution}
-                                                onChange={(e) => setFormData({ ...formData, institution: e.target.value })}
-                                                onBlur={() => setTouched({ ...touched, institution: true })}
-                                                placeholder="Bells university of Technology"
-                                                className="w-full px-4 py-3 rounded-xl bg-white/10 border-2 border-white/20 text-white placeholder-gray-400 focus:border-green-500 focus:ring-green-500/20 transition-all"
+                                                className="w-full px-4 py-3 rounded-xl bg-white/10 border-2 border-white/20 text-white placeholder-gray-400 focus:border-green-500 focus:ring-green-500/20 transition-all cursor-not-allowed opacity-80"
+                                                disabled
+                                            />
+                                        </div>
+                                        <div className="space-y-3">
+                                            <label className="text-sm font-medium text-white">
+                                                Matric Number <span className="text-red-400">*</span>
+                                            </label>
+                                            <input
+                                                type="text"
+                                                value={formData.matricNumber}
+                                                onChange={(e) => setFormData({ ...formData, matricNumber: e.target.value })}
+                                                onBlur={() => setTouched({ ...touched, matricNumber: true })}
+                                                placeholder="e.g. BHT/20/04/09/0001"
+                                                className={`w-full px-4 py-3 rounded-xl bg-white/10 border-2 ${getFieldError('matricNumber') ? 'border-red-500' : 'border-white/20'} text-white placeholder-gray-400 focus:border-green-500 focus:ring-green-500/20 transition-all`}
                                                 required
                                             />
-                                            {getFieldError('institution') && (
-                                                <p className="text-red-400 text-xs">{getFieldError('institution')}</p>
+                                            {getFieldError('matricNumber') && (
+                                                <p className="text-red-400 text-xs">{getFieldError('matricNumber')}</p>
+                                            )}
+                                        </div>
+                                        <div className="space-y-3">
+                                            <label className="text-sm font-medium text-white">
+                                                College <span className="text-red-400">*</span>
+                                            </label>
+                                            <select
+                                                value={formData.college}
+                                                onChange={(e) => setFormData({ ...formData, college: e.target.value })}
+                                                onBlur={() => setTouched({ ...touched, college: true })}
+                                                className={`w-full px-4 py-3 rounded-xl bg-white/10 border-2 ${getFieldError('college') ? 'border-red-500' : 'border-white/20'} text-white focus:border-green-500 focus:ring-green-500/20 transition-all`}
+                                                required
+                                            >
+                                                <option value="" className="bg-black">Select your college</option>
+                                                <option value="College of Natural and Applied Sciences" className="bg-black">College of Natural and Applied Sciences</option>
+                                                <option value="College of Management and Social Sciences" className="bg-black">College of Management and Social Sciences</option>
+                                                <option value="College of Engineering" className="bg-black">College of Engineering</option>
+                                                <option value="College of Environmental Sciences" className="bg-black">College of Environmental Sciences</option>
+                                                <option value="Others" className="bg-black">Others</option>
+                                            </select>
+                                            {getFieldError('college') && (
+                                                <p className="text-red-400 text-xs">{getFieldError('college')}</p>
+                                            )}
+                                        </div>
+                                        {formData.college === 'Others' && (
+                                            <div className="space-y-3">
+                                                <label className="text-sm font-medium text-white">
+                                                    Specify College <span className="text-red-400">*</span>
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    value={formData.otherCollege || ''}
+                                                    onChange={(e) => setFormData({ ...formData, otherCollege: e.target.value })}
+                                                    placeholder="Enter your college"
+                                                    className="w-full px-4 py-3 rounded-xl bg-white/10 border-2 border-white/20 text-white placeholder-gray-400 focus:border-green-500 focus:ring-green-500/20 transition-all"
+                                                    required={formData.college === 'Others'}
+                                                />
+                                            </div>
+                                        )}
+                                        <div className="space-y-3">
+                                            <label className="text-sm font-medium text-white">
+                                                Department <span className="text-red-400">*</span>
+                                            </label>
+                                            <input
+                                                type="text"
+                                                value={formData.department}
+                                                onChange={(e) => setFormData({ ...formData, department: e.target.value })}
+                                                onBlur={() => setTouched({ ...touched, department: true })}
+                                                placeholder="e.g. Computer Science"
+                                                className={`w-full px-4 py-3 rounded-xl bg-white/10 border-2 ${getFieldError('department') ? 'border-red-500' : 'border-white/20'} text-white placeholder-gray-400 focus:border-green-500 focus:ring-green-500/20 transition-all`}
+                                                required
+                                            />
+                                            {getFieldError('department') && (
+                                                <p className="text-red-400 text-xs">{getFieldError('department')}</p>
                                             )}
                                         </div>
                                         <div className="space-y-3">
@@ -429,17 +542,20 @@ export function HackathonRegistration() {
                                             </label>
                                             <select
                                                 value={formData.level}
-                                                onChange={(e) => setFormData({ ...formData, level: e.target.value as '100' | '200' | '' })}
+                                                onChange={(e) => setFormData({ ...formData, level: e.target.value as any })}
                                                 onBlur={() => setTouched({ ...touched, level: true })}
-                                                className="w-full px-4 py-3 rounded-xl bg-white/10 border-2 border-white/20 text-white focus:border-green-500 focus:ring-green-500/20 transition-all"
+                                                className={`w-full px-4 py-3 rounded-xl bg-white/10 border-2 ${getFieldError('level') ? 'border-red-500' : 'border-white/20'} text-white focus:border-green-500 focus:ring-green-500/20 transition-all`}
                                                 required
                                             >
                                                 <option value="" className="bg-black">Select your level</option>
                                                 <option value="100" className="bg-black">100 Level</option>
                                                 <option value="200" className="bg-black">200 Level</option>
+                                                <option value="300" className="bg-black">300 Level</option>
+                                                <option value="400" className="bg-black">400 Level</option>
+                                                <option value="500" className="bg-black">500 Level</option>
                                             </select>
                                             {getFieldError('level') && (
-                                                <p className="text-red-400 text-xs">{getFieldError('level')}</p>
+                                                <p className="text-red-500 text-xs mt-1">{getFieldError('level')}</p>
                                             )}
                                         </div>
                                         <div className="space-y-3">
@@ -454,6 +570,9 @@ export function HackathonRegistration() {
                                                 className="w-full px-4 py-3 rounded-xl bg-white/10 border-2 border-white/20 text-white placeholder-gray-400 focus:border-green-500 focus:ring-green-500/20 transition-all"
                                                 required
                                             />
+                                            <p className="text-xs text-green-300 italic">
+                                                All team members must use the exact same team name when registering.
+                                            </p>
                                         </div>
                                     </div>
 
@@ -472,6 +591,9 @@ export function HackathonRegistration() {
                                             <option value="3" className="bg-black">3 members</option>
                                             <option value="4" className="bg-black">4 members</option>
                                         </select>
+                                        <p className="text-xs text-green-300 italic">
+                                            All team members should select the same team size.
+                                        </p>
                                     </div>
 
                                     <div className="space-y-3">
@@ -512,22 +634,37 @@ export function HackathonRegistration() {
                                         />
                                     </div>
 
+                                    {/* Team Registration Instructions */}
+                                    <div className="bg-green-900/30 p-4 rounded-xl text-xs sm:text-sm text-green-300 mb-6 border border-green-500/30">
+                                        <p className="flex items-start gap-2 mb-2">
+                                            <span className="text-green-400">ℹ️</span>
+                                            <span className="font-semibold">Team Registration Instructions:</span>
+                                        </p>
+                                        <ul className="list-disc pl-8 space-y-1">
+                                            <li>Every team member (including the team captain) must register individually.</li>
+                                            <li>All team members must use the exact same team name in their registration.</li>
+                                            <li>Team size should be consistent across all team member registrations.</li>
+                                            <li>Each team member should specify their own skills and information.</li>
+                                        </ul>
+                                    </div>
+
                                     <div className="bg-green-900/30 p-4 rounded-xl text-xs sm:text-sm text-green-300 mb-6 border border-green-500/30">
                                         <p className="flex items-start gap-2">
-                                            <span className="text-green-400">ℹ️</span>
+                                            <span className="text-green-400">⚠️</span>
                                             <span>
-                                                After registration, join our WhatsApp group for updates and important announcements.
-                                                Each team member should register individually with the same team name.
+                                                <strong>Important:</strong> After registration, join our WhatsApp group for updates and important announcements.
+                                                Remember that each team member must register individually with the same team name.
+                                                Inconsistent team information may affect your registration status.
                                             </span>
                                         </p>
                                     </div>
 
                                     <button
                                         type="submit"
-                                        disabled={isSubmitting}
+                                        disabled={isSubmitting || !settings.registrationEnabled}
                                         className="w-full bg-gradient-to-r from-green-600 to-green-500 text-white py-3 sm:py-4 px-6 rounded-xl hover:from-green-700 hover:to-green-600 transition-all duration-300 font-semibold text-base sm:text-lg mt-6 sm:mt-8 shadow-lg shadow-green-900/50 hover:shadow-xl hover:shadow-green-900/70 disabled:opacity-50"
                                     >
-                                        {isSubmitting ? 'Submitting...' : 'Complete Registration'}
+                                        {isSubmitting ? 'Submitting...' : settings.registrationEnabled ? 'Complete Registration' : 'Registration Closed'}
                                     </button>
                                 </form>
 
@@ -537,63 +674,86 @@ export function HackathonRegistration() {
                     </div>
                     {/*  */}
 
-                    {/* Footer with QR Code */}
+                    {/* Footer with Glassmorphism Effect */}
                     <motion.div
-                        className="mt-16 pt-8 border-t border-white/10"
+                        className="mt-16 pt-8 border-t border-white/20 backdrop-blur-md"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: showIntro ? 3.8 : 0.6, duration: 0.5 }}
                     >
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
-                            <div className="md:col-span-1">
-                                <h3 className="text-white text-xl font-bold mb-4">Join the NACOS Hackathon Community</h3>
-                                <p className="text-white/70 mb-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                            <div className="space-y-6 backdrop-blur-sm bg-white/5 p-6 rounded-2xl border border-white/10 shadow-xl">
+                                <h3 className="text-white text-2xl font-bold">Join the NACOS Hackathon Community</h3>
+                                <p className="text-white/70">
                                     Be part of Nigeria's largest student hackathon and showcase your innovation skills! Connect with like-minded students, mentors, and industry professionals.
                                 </p>
-                                <div className="flex flex-wrap gap-4 mt-6">
-                                    <a href="#" className="flex items-center gap-2 bg-white/10 hover:bg-white/20 transition-colors px-4 py-2 rounded-lg text-white">
-                                        <FaWhatsapp className="text-green-400" />
-                                        <span>WhatsApp Group</span>
+                                <div className="flex flex-wrap gap-3 mt-4">
+                                    <a href={settings.whatsappLink} className="flex items-center gap-2 bg-gradient-to-r from-green-500/90 to-green-600/90 hover:from-green-600 hover:to-green-700 transition-all px-4 py-2 rounded-lg text-white font-medium shadow-lg shadow-green-500/20 backdrop-blur-sm">
+                                        <FaWhatsapp className="text-white" />
+                                        <span>Join WhatsApp Group</span>
                                     </a>
-
                                 </div>
                             </div>
-                            <div className="md:col-span-1 flex flex-col items-center">
-                                <div className="bg-white p-3 rounded-xl shadow-lg">
-                                    <img
-                                        src="/qrcode.png"
-                                        alt="Registration QR Code"
-                                        className="w-[150px] h-[150px]"
-                                    />
+                            <div className="flex flex-col items-center">
+                                <div className="bg-gradient-to-br from-white/20 to-white/5 p-5 rounded-xl shadow-xl border border-white/20 backdrop-blur-md">
+                                    <div className="bg-white p-2 rounded-lg">
+                                        <img
+                                            src="/qrcode.png"
+                                            alt="Registration QR Code"
+                                            className="w-[180px] h-[180px]"
+                                        />
+                                    </div>
                                 </div>
-                                <p className="text-green-300 text-sm mt-4 text-center">
+                                <p className="text-green-300 text-sm mt-4 text-center font-medium">
                                     Scan to share with friends
                                 </p>
                             </div>
                         </div>
 
-                        <div className="mt-10 pt-6 border-t bg-[black] border-white/10 flex flex-col md:flex-row justify-between items-center">
-                            <div className="flex items-center gap-3 mb-4 md:mb-0">
-                                <img
-                                    src="/logo.png"
-                                    alt="Inventors Logo"
-                                    className="w-8 h-8 object-contain"
-                                />
-                                <span className="text-white/70 text-sm">© 2025 NACOS Hackathon</span>
+                        <div className="mt-12 py-8 bg-black/40 backdrop-blur-lg border-t border-white/10 rounded-t-3xl flex flex-col md:flex-row justify-between items-center px-6">
+                            <div className="flex items-center gap-4 mb-6 md:mb-0">
+                                <div className="flex flex-col">
+                                    <span className="text-white font-bold">NACOS Hackathon</span>
+                                    <span className="text-white/50 text-sm">© 2025 All rights reserved</span>
+                                </div>
                             </div>
 
-                            <div className="flex items-center">
-                                <span className="text-white/50 text-sm mr-2">Made with</span>
-                                <span className="text-red-500">❤️</span>
-                                <span className="text-white/50 text-sm mx-2">by</span>
-                                <a
-                                    href="https://github.com/Olaoluwa-Adenle"
-                                    className="text-green-400 hover:text-green-300 transition-colors text-sm font-medium"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    INVENTORS COMMUNITY
+                            <div className="flex gap-6 mb-6 md:mb-0">
+                                <a href={settings.socialLinks.twitter} className="text-white/70 hover:text-white transition-colors bg-white/10 p-2 rounded-full hover:bg-white/20">
+                                    <FaTwitter size={18} />
                                 </a>
+                                <a href={settings.socialLinks.instagram} className="text-white/70 hover:text-white transition-colors bg-white/10 p-2 rounded-full hover:bg-white/20">
+                                    <FaInstagram size={18} />
+                                </a>
+                                <a href={settings.socialLinks.linkedin} className="text-white/70 hover:text-white transition-colors bg-white/10 p-2 rounded-full hover:bg-white/20">
+                                    <FaLinkedin size={18} />
+                                </a>
+                                <a href={settings.socialLinks.github} className="text-white/70 hover:text-white transition-colors bg-white/10 p-2 rounded-full hover:bg-white/20">
+                                    <FaGithub size={18} />
+                                </a>
+                            </div>
+
+                            <div className="flex flex-wrap items-center justify-center bg-white/5 px-4 py-2 rounded-full backdrop-blur-sm w-full md:w-auto mt-6 md:mt-0">
+                                <div className="flex items-center">
+                                    <img
+                                        src="/logo.png"
+                                        alt="Inventors Logo"
+                                        className="w-6 h-6 md:w-8 md:h-8 mr-2 object-contain"
+                                    />
+                                    <span className="text-white/70 text-xs md:text-sm mr-1">Made with</span>
+                                    <span className="text-red-500">❤️</span>
+                                </div>
+                                <div className="flex items-center mx-1 md:mx-0">
+                                    <span className="text-white/70 text-xs md:text-sm mx-1">by</span>
+                                    <a
+                                        href="https://github.com/Olaoluwa-Adenle"
+                                        className="text-green-400 hover:text-green-300 transition-colors text-xs md:text-sm font-medium"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        INVENTORS COMMUNITY
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </motion.div>

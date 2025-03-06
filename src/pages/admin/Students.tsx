@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
+import { collection, query, orderBy, onSnapshot, doc, updateDoc } from 'firebase/firestore';
 import { db } from '../../services/firebase';
-import { FaDownload, FaSearch, FaEye, FaTimes } from 'react-icons/fa';
+import { FaDownload, FaSearch, FaEye, FaTimes, FaCheck, FaTimesCircle } from 'react-icons/fa';
 import { toast } from 'react-hot-toast';
 
 interface Registration {
@@ -14,7 +14,9 @@ interface Registration {
     timestamp: any;
     department: string;
     level: string;
-    areasOfAssistance: {
+    teamName?: string;
+    institution?: string;
+    areasOfAssistance?: {
         courseCode: string;
         topics: string;
     }[];
@@ -22,9 +24,10 @@ interface Registration {
 
 export function Participants() {
     const [students, setStudents] = useState<Registration[]>([]);
-    const [filter, setFilter] = useState<'all' | '100' | '200' | 'individual' | 'team'>('all');
+    const [filter, setFilter] = useState<'all' | '100' | '200' | '300' | '400' | '500' | 'individual' | 'team'>('all');
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedStudent, setSelectedStudent] = useState<Registration | null>(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const q = query(collection(db, 'registrations'), orderBy('timestamp', 'desc'));
@@ -34,37 +37,79 @@ export function Participants() {
                 studentData.push({ id: doc.id, ...doc.data() } as Registration);
             });
             setStudents(studentData);
+            setLoading(false);
         });
 
         return () => unsubscribe();
     }, []);
 
     const filteredStudents = students.filter(student => {
-        const matchesFilter = filter === 'all' || student.level === filter;
+        let matchesFilter = true;
+
+        if (filter === '100' || filter === '200' || filter === '300' || filter === '400' || filter === '500') {
+            matchesFilter = student.level === filter;
+        } else if (filter === 'individual') {
+            matchesFilter = !student.teamName;
+        } else if (filter === 'team') {
+            matchesFilter = !!student.teamName;
+        }
+
         const matchesSearch =
-            student.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            student.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            student.registrationId.toLowerCase().includes(searchTerm.toLowerCase());
+            student.fullName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            student.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            student.registrationId?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            student.teamName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            student.institution?.toLowerCase().includes(searchTerm.toLowerCase());
+
         return matchesFilter && matchesSearch;
     });
 
+    const handleVerify = async (id: string, currentStatus: boolean) => {
+        try {
+            // Optimistically update the UI first
+            const updatedStudents = students.map(student => {
+                if (student.id === id) {
+                    return { ...student, verified: !currentStatus };
+                }
+                return student;
+            });
+            setStudents(updatedStudents);
+
+            // Show success message
+            toast.success(`Registration ${!currentStatus ? 'verified' : 'unverified'} successfully`);
+
+            // Then update in the database
+            await updateDoc(doc(db, 'registrations', id), {
+                verified: !currentStatus
+            });
+        } catch (error) {
+            console.error('Error updating verification status:', error);
+            toast.error('Failed to update verification status');
+
+            // Revert the optimistic update if the operation fails
+            const originalStudents = students.map(student => {
+                if (student.id === id) {
+                    return { ...student, verified: currentStatus };
+                }
+                return student;
+            });
+            setStudents(originalStudents);
+        }
+    };
+
     const exportToCSV = () => {
         try {
-            const headers = ['Registration ID', 'Full Name', 'Email', 'Phone', 'Level', 'Department', 'Courses'];
+            const headers = ['Registration ID', 'Full Name', 'Email', 'Phone', 'Level', 'Department', 'Team', 'Institution', 'Verified'];
             const data = filteredStudents.map(student => [
                 student.registrationId || 'N/A',
                 student.fullName || 'Not provided',
                 student.email || 'No email',
                 student.phoneNumber || 'No phone',
                 student.level ? `${student.level} Level` : 'Not specified',
-                student.department ?
-                    (student.department === 'computer_science' ? 'Computer Science' : 'IT')
-                    : 'Not specified',
-                student.areasOfAssistance && student.areasOfAssistance.length > 0
-                    ? student.areasOfAssistance.map(area =>
-                        `${area.courseCode || 'No code'} (${area.topics || 'No topics'})`
-                    ).join('; ')
-                    : 'No courses specified'
+                student.department || 'Not specified',
+                student.teamName || 'Individual',
+                student.institution || 'Not specified',
+                student.verified ? 'Yes' : 'No'
             ]);
 
             const csvContent = [
@@ -76,7 +121,7 @@ export function Participants() {
             const link = document.createElement('a');
             const url = URL.createObjectURL(blob);
             link.setAttribute('href', url);
-            link.setAttribute('download', `students_${new Date().toISOString().split('T')[0]}.csv`);
+            link.setAttribute('download', `participants_${new Date().toISOString().split('T')[0]}.csv`);
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -88,145 +133,239 @@ export function Participants() {
     };
 
     return (
-        <div className="p-4 sm:p-6 lg:p-8 space-y-6">
-            {/* Header */}
-            <div className="flex flex-col xs:flex-row justify-between items-start xs:items-center gap-4 mb-6">
-                <div>
-                    <h1 className="text-xl xs:text-2xl font-bold text-gray-800">Participants</h1>
-                    <p className="text-xs xs:text-sm text-gray-600">View and manage hackathon participants</p>
-                </div>
-                <div className="w-full xs:w-auto flex flex-col xs:flex-row gap-3">
-                    <div className="relative flex-1 xs:flex-none">
-                        <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                        <input
-                            type="text"
-                            placeholder="Search participants..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full pl-10 pr-4 py-2 text-sm rounded-lg border"
-                        />
+        <div className="p-6 bg-gray-50 min-h-screen">
+            <div className="max-w-7xl mx-auto">
+                {/* Header */}
+                <div className="flex justify-between items-center mb-8">
+                    <div>
+                        <h1 className="text-2xl font-bold text-gray-800">Hackathon Participants</h1>
+                        <p className="text-gray-600">View and manage all registered participants</p>
                     </div>
-                    <button
-                        onClick={exportToCSV}
-                        className="flex items-center justify-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg text-sm"
-                    >
-                        <FaDownload className="text-sm" />
-                        <span>Export</span>
-                    </button>
+                    <div className="flex items-center gap-4">
+                        <a
+                            href="/admin/analytics"
+                            className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+                        >
+                            View Analytics
+                        </a>
+                        <button
+                            onClick={exportToCSV}
+                            className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                        >
+                            <FaDownload className="mr-2" />
+                            Export Data
+                        </button>
+                    </div>
                 </div>
-            </div>
 
-            {/* Filters */}
-            <div className="flex flex-wrap gap-2 mb-6">
-                <button
-                    onClick={() => setFilter('all')}
-                    className={`px-4 py-2 rounded-lg ${filter === 'all' ? 'bg-purple-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
-                >
-                    All Participants
-                </button>
-                <button
-                    onClick={() => setFilter('individual')}
-                    className={`px-4 py-2 rounded-lg ${filter === 'individual' ? 'bg-purple-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
-                >
-                    Individuals
-                </button>
-                <button
-                    onClick={() => setFilter('team')}
-                    className={`px-4 py-2 rounded-lg ${filter === 'team' ? 'bg-purple-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
-                >
-                    Teams
-                </button>
-            </div>
+                {loading ? (
+                    <div className="flex justify-center items-center h-64">
+                        <div className="animate-spin h-12 w-12 border-4 border-green-600 rounded-full border-t-transparent"></div>
+                    </div>
+                ) : (
+                    <>
+                        {/* Search and Filters */}
+                        <div className="mb-6 flex flex-col md:flex-row gap-4">
+                            <div className="relative flex-grow">
+                                <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                                <input
+                                    type="text"
+                                    placeholder="Search by name, email, team or institution..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                                />
+                            </div>
+                            <div className="flex flex-wrap gap-2">
+                                <button
+                                    onClick={() => setFilter('all')}
+                                    className={`px-3 py-2 rounded-lg text-sm ${filter === 'all' ? 'bg-green-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                                >
+                                    All
+                                </button>
+                                <button
+                                    onClick={() => setFilter('individual')}
+                                    className={`px-3 py-2 rounded-lg text-sm ${filter === 'individual' ? 'bg-green-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                                >
+                                    Individuals
+                                </button>
+                                <button
+                                    onClick={() => setFilter('team')}
+                                    className={`px-3 py-2 rounded-lg text-sm ${filter === 'team' ? 'bg-green-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                                >
+                                    Teams
+                                </button>
+                                <button
+                                    onClick={() => setFilter('100')}
+                                    className={`px-3 py-2 rounded-lg text-sm ${filter === '100' ? 'bg-green-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                                >
+                                    100 Level
+                                </button>
+                                <button
+                                    onClick={() => setFilter('200')}
+                                    className={`px-3 py-2 rounded-lg text-sm ${filter === '200' ? 'bg-green-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                                >
+                                    200 Level
+                                </button>
+                                <button
+                                    onClick={() => setFilter('300')}
+                                    className={`px-3 py-2 rounded-lg text-sm ${filter === '300' ? 'bg-green-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                                >
+                                    300 Level
+                                </button>
+                                <button
+                                    onClick={() => setFilter('400')}
+                                    className={`px-3 py-2 rounded-lg text-sm ${filter === '400' ? 'bg-green-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                                >
+                                    400 Level
+                                </button>
+                                <button
+                                    onClick={() => setFilter('500')}
+                                    className={`px-3 py-2 rounded-lg text-sm ${filter === '500' ? 'bg-green-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                                >
+                                    500 Level
+                                </button>
+                            </div>
+                        </div>
 
-            {/* Students Table */}
-            <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-                <div className="overflow-x-auto">
-                    <table className="w-full whitespace-nowrap">
-                        <thead className="bg-gray-50">
-                            <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Team</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Institution</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Contact</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-gray-200">
-                            {filteredStudents.map((student) => (
-                                <tr key={student.id} className="hover:bg-gray-50">
-                                    <td className="px-6 py-4 text-sm text-gray-900 font-mono">{student.registrationId || 'N/A'}</td>
-                                    <td className="px-6 py-4 text-sm text-gray-900">{student.fullName || 'Not provided'}</td>
-                                    <td className="px-6 py-4 text-sm text-gray-900">{student.level ? `${student.level} Level` : 'Not specified'}</td>
-                                    <td className="px-6 py-4 text-sm text-gray-900">
-                                        {student.department ?
-                                            (student.department === 'computer_science' ? 'Computer Science' : 'IT')
-                                            : 'Not specified'
-                                        }
-                                    </td>
-                                    <td className="px-6 py-4 text-sm text-gray-900">
-                                        <div>{student.email || 'No email'}</div>
-                                        <div className="text-gray-500">{student.phoneNumber || 'No phone'}</div>
-                                    </td>
-                                    <td className="px-6 py-4 text-sm text-gray-900">
-                                        <button
-                                            onClick={() => setSelectedStudent(student)}
-                                            className="text-purple-600 hover:text-purple-800"
-                                        >
-                                            <FaEye />
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
+                        {/* Participants Table */}
+                        <div className="bg-white rounded-xl shadow-sm overflow-hidden mb-8">
+                            <div className="overflow-x-auto">
+                                <table className="min-w-full divide-y divide-gray-200">
+                                    <thead className="bg-gray-50">
+                                        <tr>
+                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID/Matric</th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Team</th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Level</th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Institution</th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="bg-white divide-y divide-gray-200">
+                                        {filteredStudents.length > 0 ? (
+                                            filteredStudents.map((student) => (
+                                                <tr key={student.id} className="hover:bg-gray-50">
+                                                    <td className="px-6 py-4 whitespace-nowrap">
+                                                        <div className="text-sm font-medium text-gray-900">{student.fullName || 'Not provided'}</div>
+                                                        <div className="text-xs text-gray-500">{student.email || 'No email'}</div>
+                                                    </td>
+                                                    <td className="px-6 py-4 whitespace-nowrap">
+                                                        <div className="text-sm text-gray-500 font-mono">{student.registrationId || 'N/A'}</div>
+                                                    </td>
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                        {student.teamName || 'Individual'}
+                                                    </td>
+                                                    <td className="px-6 py-4 whitespace-nowrap">
+                                                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                                            {student.level ? `${student.level} Level` : 'N/A'}
+                                                        </span>
+                                                    </td>
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                        {student.institution || 'Not specified'}
+                                                    </td>
+                                                    <td className="px-6 py-4 whitespace-nowrap">
+                                                        <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${student.verified ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
+                                                            {student.verified ? 'Verified' : 'Pending'}
+                                                        </span>
+                                                    </td>
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                        <button
+                                                            className="text-indigo-600 hover:text-indigo-900 mr-3"
+                                                            onClick={() => setSelectedStudent(student)}
+                                                        >
+                                                            <FaEye />
+                                                        </button>
+                                                        <button
+                                                            className={`${student.verified ? 'text-amber-600 hover:text-amber-900' : 'text-green-600 hover:text-green-900'}`}
+                                                            onClick={() => handleVerify(student.id, student.verified)}
+                                                        >
+                                                            {student.verified ? 'Unverify' : 'Verify'}
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            ))
+                                        ) : (
+                                            <tr>
+                                                <td colSpan={7} className="px-6 py-4 text-center text-sm text-gray-500">
+                                                    No participants found matching your search.
+                                                </td>
+                                            </tr>
+                                        )}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </>
+                )}
             </div>
 
             {/* Student Details Modal */}
             {selectedStudent && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4">
-                    <div className="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-                        <div className="p-6 border-b border-gray-200 flex justify-between items-start">
-                            <div>
-                                <h2 className="text-xl font-semibold text-gray-800">{selectedStudent.fullName}</h2>
-                                <p className="text-sm text-gray-600">Registration ID: {selectedStudent.registrationId}</p>
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                    <div className="bg-white rounded-xl shadow-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+                        <div className="p-6">
+                            <div className="flex justify-between items-center mb-6">
+                                <h2 className="text-xl font-bold text-gray-800">Participant Details</h2>
+                                <button
+                                    onClick={() => setSelectedStudent(null)}
+                                    className="text-gray-500 hover:text-gray-700"
+                                >
+                                    <FaTimes size={20} />
+                                </button>
                             </div>
-                            <button
-                                onClick={() => setSelectedStudent(null)}
-                                className="text-gray-500 hover:text-gray-700"
-                            >
-                                <FaTimes />
-                            </button>
-                        </div>
-                        <div className="p-6 space-y-6">
-                            <div className="grid grid-cols-2 gap-4">
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                    <h3 className="text-sm font-medium text-gray-500">Level</h3>
-                                    <p className="mt-1">{selectedStudent.level ? `${selectedStudent.level} Level` : 'Not specified'}</p>
+                                    <h3 className="text-lg font-semibold text-gray-700 mb-4">Personal Information</h3>
+                                    <div className="space-y-3">
+                                        <div>
+                                            <p className="text-sm text-gray-500">Full Name</p>
+                                            <p className="text-base font-medium">{selectedStudent.fullName || 'Not provided'}</p>
+                                        </div>
+                                        <div>
+                                            <p className="text-sm text-gray-500">Email</p>
+                                            <p className="text-base">{selectedStudent.email || 'Not provided'}</p>
+                                        </div>
+                                        <div>
+                                            <p className="text-sm text-gray-500">Phone Number</p>
+                                            <p className="text-base">{selectedStudent.phoneNumber || 'Not provided'}</p>
+                                        </div>
+                                        <div>
+                                            <p className="text-sm text-gray-500">Registration ID</p>
+                                            <p className="text-base font-mono">{selectedStudent.registrationId || 'N/A'}</p>
+                                        </div>
+                                    </div>
                                 </div>
+
                                 <div>
-                                    <h3 className="text-sm font-medium text-gray-500">Department</h3>
-                                    <p className="mt-1">
-                                        {selectedStudent.department ?
-                                            (selectedStudent.department === 'computer_science' ? 'Computer Science' : 'IT')
-                                            : 'Not specified'
-                                        }
-                                    </p>
-                                </div>
-                                <div>
-                                    <h3 className="text-sm font-medium text-gray-500">Email</h3>
-                                    <p className="mt-1">{selectedStudent.email || 'Not provided'}</p>
-                                </div>
-                                <div>
-                                    <h3 className="text-sm font-medium text-gray-500">Phone</h3>
-                                    <p className="mt-1">{selectedStudent.phoneNumber || 'Not provided'}</p>
+                                    <h3 className="text-lg font-semibold text-gray-700 mb-4">Academic Information</h3>
+                                    <div className="space-y-3">
+                                        <div>
+                                            <p className="text-sm text-gray-500">Institution</p>
+                                            <p className="text-base">{selectedStudent.institution || 'Not specified'}</p>
+                                        </div>
+                                        <div>
+                                            <p className="text-sm text-gray-500">Department</p>
+                                            <p className="text-base">{selectedStudent.department || 'Not specified'}</p>
+                                        </div>
+                                        <div>
+                                            <p className="text-sm text-gray-500">Level</p>
+                                            <p className="text-base">{selectedStudent.level ? `${selectedStudent.level} Level` : 'Not specified'}</p>
+                                        </div>
+                                        <div>
+                                            <p className="text-sm text-gray-500">Team</p>
+                                            <p className="text-base">{selectedStudent.teamName || 'Individual Participant'}</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div>
-                                <h3 className="text-sm font-medium text-gray-500 mb-2">Courses & Topics</h3>
-                                {selectedStudent.areasOfAssistance && selectedStudent.areasOfAssistance.length > 0 ? (
-                                    <div className="space-y-2">
+
+                            {selectedStudent.areasOfAssistance && selectedStudent.areasOfAssistance.length > 0 && (
+                                <div className="mt-6">
+                                    <h3 className="text-lg font-semibold text-gray-700 mb-4">Areas of Assistance</h3>
+                                    <div className="space-y-3">
                                         {selectedStudent.areasOfAssistance.map((area, index) => (
                                             <div key={index} className="bg-gray-50 p-3 rounded-lg">
                                                 <p className="font-medium text-gray-700">{area.courseCode || 'No course code'}</p>
@@ -234,11 +373,35 @@ export function Participants() {
                                             </div>
                                         ))}
                                     </div>
-                                ) : (
-                                    <div className="bg-gray-50 p-4 rounded-lg text-center">
-                                        <p className="text-gray-500">No courses or topics specified</p>
-                                    </div>
-                                )}
+                                </div>
+                            )}
+
+                            <div className="mt-8 flex justify-end space-x-4">
+                                <button
+                                    onClick={() => setSelectedStudent(null)}
+                                    className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                                >
+                                    Close
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        handleVerify(selectedStudent.id, selectedStudent.verified);
+                                        setSelectedStudent(null);
+                                    }}
+                                    className={`px-4 py-2 rounded-md text-white flex items-center ${selectedStudent.verified ? 'bg-amber-600 hover:bg-amber-700' : 'bg-green-600 hover:bg-green-700'}`}
+                                >
+                                    {selectedStudent.verified ? (
+                                        <>
+                                            <FaTimesCircle className="mr-2" />
+                                            Unverify Participant
+                                        </>
+                                    ) : (
+                                        <>
+                                            <FaCheck className="mr-2" />
+                                            Verify Participant
+                                        </>
+                                    )}
+                                </button>
                             </div>
                         </div>
                     </div>

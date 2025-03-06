@@ -480,7 +480,7 @@ export function AdminDashboard() {
                                         {!reg.verified && (
                                             <button
                                                 onClick={() => handleVerify(reg.id)}
-                                                className="text-purple-600 hover:text-purple-900 text-[10px] xs:text-xs"
+                                                className="text-green-400 hover:text-green-300 text-[10px] xs:text-xs"
                                             >
                                                 Verify
                                             </button>
@@ -508,15 +508,15 @@ export function AdminDashboard() {
 }
 
 // Helper Components
-const StatCard = ({ title, value, icon, color = 'purple', className = '', isText = false }: StatCardProps) => (
-    <div className={`bg-white rounded-lg sm:rounded-xl p-3 sm:p-4 lg:p-6 shadow-sm ${className}`}>
+const StatCard = ({ title, value, icon, color = 'green', className = '', isText = false }: StatCardProps) => (
+    <div className={`bg-white/5 backdrop-blur-sm rounded-lg sm:rounded-xl p-3 sm:p-4 lg:p-6 shadow-sm border border-white/10 ${className}`}>
         <div className="flex items-center gap-2 sm:gap-3">
-            <div className={`bg-${color}-100 p-1.5 sm:p-2 lg:p-3 rounded-lg`}>
-                <div className={`text-base xs:text-lg sm:text-xl lg:text-2xl text-${color}-600`}>{icon}</div>
+            <div className={`bg-${color}-900/30 p-1.5 sm:p-2 lg:p-3 rounded-lg border border-${color}-500/30`}>
+                <div className={`text-base xs:text-lg sm:text-xl lg:text-2xl text-${color}-400`}>{icon}</div>
             </div>
             <div>
-                <p className="text-[10px] xs:text-xs sm:text-sm text-gray-600">{title}</p>
-                <p className={`text-sm xs:text-base sm:text-lg lg:text-2xl font-bold text-gray-900 ${isText ? 'text-gray-500' : ''}`}>{value}</p>
+                <p className="text-[10px] xs:text-xs sm:text-sm text-green-400">{title}</p>
+                <p className={`text-sm xs:text-base sm:text-lg lg:text-2xl font-bold text-white ${isText ? 'text-green-300 text-sm' : ''}`}>{value}</p>
             </div>
         </div>
     </div>
@@ -524,17 +524,17 @@ const StatCard = ({ title, value, icon, color = 'purple', className = '', isText
 
 const StatusBadge = ({ verified }: StatusBadgeProps) => (
     <span className={`inline-flex items-center gap-0.5 sm:gap-1 px-1.5 sm:px-2 py-0.5 rounded-full text-[10px] xs:text-xs font-medium ${verified
-        ? 'bg-green-100 text-green-800'
-        : 'bg-yellow-100 text-yellow-800'
+        ? 'bg-green-900/30 text-green-400 border border-green-500/30'
+        : 'bg-yellow-900/30 text-yellow-400 border border-yellow-500/30'
         }`}>
         {verified ? (
             <>
-                <FaCheck className="text-[8px] xs:text-xs text-green-500" />
+                <FaCheck className="text-[8px] xs:text-xs text-green-400" />
                 <span className="text-[9px] xs:text-xs">Verified</span>
             </>
         ) : (
             <>
-                <FaClock className="text-[8px] xs:text-xs text-yellow-500" />
+                <FaClock className="text-[8px] xs:text-xs text-yellow-400" />
                 <span className="text-[9px] xs:text-xs">Pending</span>
             </>
         )}
@@ -545,31 +545,31 @@ const Pagination = ({ currentPage, totalPages, onPageChange, itemsPerPage, filte
     const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
     return (
-        <div className="flex items-center justify-between px-4 py-3 sm:px-6">
+        <div className="flex items-center justify-between px-4 py-3 sm:px-6 border-t border-white/10">
             <div className="flex flex-1 justify-between sm:hidden">
                 <button
                     onClick={() => onPageChange(currentPage - 1)}
                     disabled={currentPage === 1}
-                    className="relative inline-flex items-center px-4 py-2 text-sm font-medium rounded-md text-gray-700 bg-white border border-gray-300 disabled:opacity-50"
+                    className="relative inline-flex items-center px-4 py-2 text-sm font-medium rounded-md text-white bg-green-900/30 border border-green-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     Previous
                 </button>
                 <button
                     onClick={() => onPageChange(currentPage + 1)}
                     disabled={currentPage === totalPages}
-                    className="relative ml-3 inline-flex items-center px-4 py-2 text-sm font-medium rounded-md text-gray-700 bg-white border border-gray-300 disabled:opacity-50"
+                    className="relative ml-3 inline-flex items-center px-4 py-2 text-sm font-medium rounded-md text-white bg-green-900/30 border border-green-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     Next
                 </button>
             </div>
             <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
                 <div>
-                    <p className="text-sm text-gray-700">
-                        Showing <span className="font-medium">{((currentPage - 1) * itemsPerPage) + 1}</span> to{' '}
-                        <span className="font-medium">
+                    <p className="text-sm text-green-400">
+                        Showing <span className="font-medium text-white">{((currentPage - 1) * itemsPerPage) + 1}</span> to{' '}
+                        <span className="font-medium text-white">
                             {Math.min(currentPage * itemsPerPage, filteredRegistrations.length)}
                         </span> of{' '}
-                        <span className="font-medium">{filteredRegistrations.length}</span> results
+                        <span className="font-medium text-white">{filteredRegistrations.length}</span> results
                     </p>
                 </div>
                 <div>
@@ -578,10 +578,10 @@ const Pagination = ({ currentPage, totalPages, onPageChange, itemsPerPage, filte
                             <button
                                 key={page}
                                 onClick={() => onPageChange(page)}
-                                className={`relative inline-flex items-center px-4 py-2 text-sm font-medium ${currentPage === page
-                                    ? 'z-10 bg-purple-600 text-white'
-                                    : 'text-gray-900 hover:bg-gray-50'
-                                    } border border-gray-300`}
+                                className={`relative inline-flex items-center px-4 py-2 text-sm font-medium border ${currentPage === page
+                                    ? 'z-10 bg-green-600 text-white border-green-500'
+                                    : 'text-white hover:bg-green-900/30 border-white/10'
+                                    }`}
                             >
                                 {page}
                             </button>

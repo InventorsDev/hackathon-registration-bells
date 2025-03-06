@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { auth } from '../services/firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { FaTimes, FaLock } from 'react-icons/fa';
+import { FaTimes, FaLock, FaSpinner } from 'react-icons/fa';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,17 +13,22 @@ interface LoginPopupProps {
 export function LoginPopup({ isOpen, onClose }: LoginPopupProps) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
+        setIsLoading(true);
+
         try {
             await signInWithEmailAndPassword(auth, email, password);
             toast.success('Logged in successfully!');
             onClose();
-            navigate('/admin');
+            navigate('/admin/analytics');
         } catch (error) {
             toast.error('Invalid credentials');
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -37,7 +42,11 @@ export function LoginPopup({ isOpen, onClose }: LoginPopupProps) {
                         <FaLock className="text-2xl text-green-500" />
                         <h2 className="text-2xl font-bold text-white">Admin Login</h2>
                     </div>
-                    <button onClick={onClose} className="text-gray-400 hover:text-white">
+                    <button
+                        onClick={onClose}
+                        className="text-gray-400 hover:text-white"
+                        disabled={isLoading}
+                    >
                         <FaTimes className="text-xl" />
                     </button>
                 </div>
@@ -53,6 +62,7 @@ export function LoginPopup({ isOpen, onClose }: LoginPopupProps) {
                             onChange={(e) => setEmail(e.target.value)}
                             className="w-full px-4 py-3 rounded-xl bg-white/10 border-2 border-white/20 text-white focus:border-green-500 focus:ring-0"
                             required
+                            disabled={isLoading}
                         />
                     </div>
 
@@ -66,14 +76,23 @@ export function LoginPopup({ isOpen, onClose }: LoginPopupProps) {
                             onChange={(e) => setPassword(e.target.value)}
                             className="w-full px-4 py-3 rounded-xl bg-white/10 border-2 border-white/20 text-white focus:border-green-500 focus:ring-0"
                             required
+                            disabled={isLoading}
                         />
                     </div>
 
                     <button
                         type="submit"
-                        className="w-full bg-gradient-to-r from-green-600 to-green-500 text-white py-3 px-6 rounded-xl hover:from-green-700 hover:to-green-600 transition-colors duration-300 font-semibold"
+                        className="w-full bg-gradient-to-r from-green-600 to-green-500 text-white py-3 px-6 rounded-xl hover:from-green-700 hover:to-green-600 transition-colors duration-300 font-semibold flex items-center justify-center"
+                        disabled={isLoading}
                     >
-                        Login
+                        {isLoading ? (
+                            <>
+                                <FaSpinner className="animate-spin mr-2" />
+                                Logging in...
+                            </>
+                        ) : (
+                            'Login'
+                        )}
                     </button>
                 </form>
             </div>
