@@ -181,7 +181,10 @@ export function HackathonRegistration() {
         '/bg2.jpeg',
         '/bg3.jpeg',
         '/bg4.jpeg',
-        '/bg5.jpeg'
+        '/bg5.jpeg',
+        '/bg6.jpeg',
+        '/bg7.jpeg',
+
     ];
 
     // Add this for the QR code
