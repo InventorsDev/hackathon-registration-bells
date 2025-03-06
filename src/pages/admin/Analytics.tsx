@@ -219,14 +219,14 @@ export function Analytics() {
     };
 
     const StatCard = ({ title, value, icon, color }: StatCardProps) => (
-        <div className={`bg-white rounded-xl shadow-sm p-6 border-t-4 border-${color}-500`}>
-            <div className="flex items-center gap-4">
-                <div className={`bg-${color}-100 p-3 rounded-full text-${color}-500 text-xl`}>
+        <div className={`bg-white rounded-xl shadow-sm p-4 sm:p-6 border-t-4 border-${color}-500`}>
+            <div className="flex items-center gap-3 sm:gap-4">
+                <div className={`bg-${color}-100 p-2 sm:p-3 rounded-full text-${color}-500 text-lg sm:text-xl`}>
                     {icon}
                 </div>
                 <div>
-                    <p className="text-gray-500 text-sm">{title}</p>
-                    <p className="text-2xl font-bold text-gray-800">{value}</p>
+                    <p className="text-gray-500 text-xs sm:text-sm">{title}</p>
+                    <p className="text-xl sm:text-2xl font-bold text-gray-800">{value}</p>
                 </div>
             </div>
         </div>
@@ -259,8 +259,8 @@ export function Analytics() {
                         onClick={() => paginate(Math.max(1, currentPage - 1))}
                         disabled={currentPage === 1}
                         className={`relative inline-flex items-center rounded-md px-4 py-2 text-sm font-medium ${currentPage === 1
-                                ? 'text-gray-300 cursor-not-allowed'
-                                : 'text-gray-700 hover:bg-gray-50'
+                            ? 'text-gray-300 cursor-not-allowed'
+                            : 'text-gray-700 hover:bg-gray-50'
                             }`}
                     >
                         Previous
@@ -269,8 +269,8 @@ export function Analytics() {
                         onClick={() => paginate(Math.min(totalPages, currentPage + 1))}
                         disabled={currentPage === totalPages}
                         className={`relative ml-3 inline-flex items-center rounded-md px-4 py-2 text-sm font-medium ${currentPage === totalPages
-                                ? 'text-gray-300 cursor-not-allowed'
-                                : 'text-gray-700 hover:bg-gray-50'
+                            ? 'text-gray-300 cursor-not-allowed'
+                            : 'text-gray-700 hover:bg-gray-50'
                             }`}
                     >
                         Next
@@ -292,8 +292,8 @@ export function Analytics() {
                                 onClick={() => paginate(Math.max(1, currentPage - 1))}
                                 disabled={currentPage === 1}
                                 className={`relative inline-flex items-center rounded-l-md px-2 py-2 ${currentPage === 1
-                                        ? 'text-gray-300 cursor-not-allowed'
-                                        : 'text-gray-500 hover:bg-gray-50'
+                                    ? 'text-gray-300 cursor-not-allowed'
+                                    : 'text-gray-500 hover:bg-gray-50'
                                     }`}
                             >
                                 <span className="sr-only">Previous</span>
@@ -307,8 +307,8 @@ export function Analytics() {
                                     <button
                                         onClick={() => paginate(1)}
                                         className={`relative inline-flex items-center px-4 py-2 text-sm font-medium ${currentPage === 1
-                                                ? 'bg-green-50 text-green-600'
-                                                : 'text-gray-500 hover:bg-gray-50'
+                                            ? 'bg-green-50 text-green-600'
+                                            : 'text-gray-500 hover:bg-gray-50'
                                             }`}
                                     >
                                         1
@@ -326,8 +326,8 @@ export function Analytics() {
                                     key={number}
                                     onClick={() => paginate(number)}
                                     className={`relative inline-flex items-center px-4 py-2 text-sm font-medium ${currentPage === number
-                                            ? 'bg-green-50 text-green-600'
-                                            : 'text-gray-500 hover:bg-gray-50'
+                                        ? 'bg-green-50 text-green-600'
+                                        : 'text-gray-500 hover:bg-gray-50'
                                         }`}
                                 >
                                     {number}
@@ -344,8 +344,8 @@ export function Analytics() {
                                     <button
                                         onClick={() => paginate(totalPages)}
                                         className={`relative inline-flex items-center px-4 py-2 text-sm font-medium ${currentPage === totalPages
-                                                ? 'bg-green-50 text-green-600'
-                                                : 'text-gray-500 hover:bg-gray-50'
+                                            ? 'bg-green-50 text-green-600'
+                                            : 'text-gray-500 hover:bg-gray-50'
                                             }`}
                                     >
                                         {totalPages}
@@ -357,8 +357,8 @@ export function Analytics() {
                                 onClick={() => paginate(Math.min(totalPages, currentPage + 1))}
                                 disabled={currentPage === totalPages}
                                 className={`relative inline-flex items-center rounded-r-md px-2 py-2 ${currentPage === totalPages
-                                        ? 'text-gray-300 cursor-not-allowed'
-                                        : 'text-gray-500 hover:bg-gray-50'
+                                    ? 'text-gray-300 cursor-not-allowed'
+                                    : 'text-gray-500 hover:bg-gray-50'
                                     }`}
                             >
                                 <span className="sr-only">Next</span>
@@ -379,16 +379,16 @@ export function Analytics() {
     }, [searchTerm]);
 
     return (
-        <div className="p-6 bg-gray-50 min-h-screen">
+        <div className="p-4 sm:p-6 bg-gray-50 min-h-screen">
             <div className="max-w-7xl mx-auto">
-                <div className="flex justify-between items-center mb-8">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6 sm:mb-8">
                     <div>
-                        <h1 className="text-2xl font-bold text-gray-800">Hackathon Analytics</h1>
-                        <p className="text-gray-600">Overview of registration statistics and insights</p>
+                        <h1 className="text-xl sm:text-2xl font-bold text-gray-800">Hackathon Analytics</h1>
+                        <p className="text-sm text-gray-600">Overview of registration statistics and insights</p>
                     </div>
                     <a
                         href="/admin/students"
-                        className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                        className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 w-full sm:w-auto justify-center sm:justify-start"
                     >
                         Back to Registration
                     </a>
@@ -401,7 +401,7 @@ export function Analytics() {
                 ) : (
                     <>
                         {/* Stats Overview */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-6 sm:mb-8">
                             <StatCard
                                 title="Total Registrations"
                                 value={stats.totalRegistrations}
@@ -429,11 +429,11 @@ export function Analytics() {
                         </div>
 
                         {/* Detailed Analytics */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
                             {/* Level Distribution */}
-                            <div className="bg-white rounded-xl shadow-sm p-6">
-                                <div className="flex items-center justify-between mb-6">
-                                    <h2 className="text-lg font-semibold text-gray-800">Level Distribution</h2>
+                            <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6">
+                                <div className="flex items-center justify-between mb-4 sm:mb-6">
+                                    <h2 className="text-base sm:text-lg font-semibold text-gray-800">Level Distribution</h2>
                                     <FaGraduationCap className="text-blue-500" />
                                 </div>
                                 <div className="space-y-4">
@@ -501,9 +501,9 @@ export function Analytics() {
                             </div>
 
                             {/* Participation Type */}
-                            <div className="bg-white rounded-xl shadow-sm p-6">
-                                <div className="flex items-center justify-between mb-6">
-                                    <h2 className="text-lg font-semibold text-gray-800">Participation Type</h2>
+                            <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6">
+                                <div className="flex items-center justify-between mb-4 sm:mb-6">
+                                    <h2 className="text-base sm:text-lg font-semibold text-gray-800">Participation Type</h2>
                                     <FaChartPie className="text-purple-500" />
                                 </div>
                                 <div className="space-y-4">
@@ -549,9 +549,9 @@ export function Analytics() {
                             </div>
 
                             {/* Top Skills */}
-                            <div className="bg-white rounded-xl shadow-sm p-6">
-                                <div className="flex items-center justify-between mb-6">
-                                    <h2 className="text-lg font-semibold text-gray-800">Top Skills</h2>
+                            <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6">
+                                <div className="flex items-center justify-between mb-4 sm:mb-6">
+                                    <h2 className="text-base sm:text-lg font-semibold text-gray-800">Top Skills</h2>
                                     <FaLaptopCode className="text-green-500" />
                                 </div>
                                 <div className="space-y-4">
@@ -573,9 +573,9 @@ export function Analytics() {
                             </div>
 
                             {/* Registration Status */}
-                            <div className="bg-white rounded-xl shadow-sm p-6">
-                                <div className="flex items-center justify-between mb-6">
-                                    <h2 className="text-lg font-semibold text-gray-800">Registration Status</h2>
+                            <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6">
+                                <div className="flex items-center justify-between mb-4 sm:mb-6">
+                                    <h2 className="text-base sm:text-lg font-semibold text-gray-800">Registration Status</h2>
                                     <FaChartBar className="text-blue-500" />
                                 </div>
                                 <div className="flex items-center justify-center h-48">
@@ -618,14 +618,14 @@ export function Analytics() {
                         </div>
 
                         {/* All Registrations with Search */}
-                        <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
-                            <div className="flex items-center justify-between mb-6">
-                                <h2 className="text-lg font-semibold text-gray-800">All Registrations</h2>
-                                <div className="relative">
+                        <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 mb-6 sm:mb-8">
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 sm:mb-6">
+                                <h2 className="text-base sm:text-lg font-semibold text-gray-800">All Registrations</h2>
+                                <div className="w-full sm:w-auto">
                                     <input
                                         type="text"
                                         placeholder="Search registrations..."
-                                        className="border border-gray-300 rounded-md py-2 px-4 pl-10 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                                        className="w-full border border-gray-300 rounded-md py-2 px-4 pl-10 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
                                         value={searchTerm}
                                         onChange={(e) => setSearchTerm(e.target.value)}
                                     />
@@ -636,76 +636,80 @@ export function Analytics() {
                                     </div>
                                 </div>
                             </div>
-                            <div className="overflow-x-auto">
-                                <table className="min-w-full divide-y divide-gray-200">
-                                    <thead className="bg-gray-50">
-                                        <tr>
-                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID/Matric</th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Department</th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Team</th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Level</th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="bg-white divide-y divide-gray-200">
-                                        {filteredRegistrations.length > 0 ? (
-                                            currentRegistrations.map((reg) => (
-                                                <tr key={reg.id} className="hover:bg-gray-50">
-                                                    <td className="px-6 py-4 whitespace-nowrap">
-                                                        <div className="text-sm font-medium text-gray-900">{reg.fullName}</div>
-                                                        <div className="text-xs text-gray-500">{reg.email}</div>
-                                                    </td>
-                                                    <td className="px-6 py-4 whitespace-nowrap">
-                                                        <div className="text-sm text-gray-500">{reg.matricNumber || 'N/A'}</div>
-                                                        <div className="text-xs text-gray-400">{reg.registrationId || reg.id.substring(0, 8)}</div>
-                                                    </td>
-                                                    <td className="px-6 py-4 whitespace-nowrap">
-                                                        <div className="text-sm text-gray-500">{reg.department || 'N/A'}</div>
-                                                        <div className="text-xs text-gray-400">{reg.college || 'N/A'}</div>
-                                                    </td>
-                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                        {reg.teamName || 'Individual'}
-                                                        {reg.teamName && (
-                                                            <div className="text-xs text-gray-400">Size: {reg.teamSize || '1'}</div>
-                                                        )}
-                                                    </td>
-                                                    <td className="px-6 py-4 whitespace-nowrap">
-                                                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                                                            {reg.level || 'N/A'}
-                                                        </span>
-                                                    </td>
-                                                    <td className="px-6 py-4 whitespace-nowrap">
-                                                        <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${reg.verified ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
-                                                            {reg.verified ? 'Verified' : 'Pending'}
-                                                        </span>
-                                                    </td>
-                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                        <button
-                                                            className="text-indigo-600 hover:text-indigo-900 mr-3"
-                                                            onClick={() => handleViewRegistration(reg)}
-                                                        >
-                                                            View
-                                                        </button>
-                                                        <button
-                                                            className={`${reg.verified ? 'text-amber-600 hover:text-amber-900' : 'text-green-600 hover:text-green-900'}`}
-                                                            onClick={() => handleVerify(reg.id, reg.verified)}
-                                                        >
-                                                            {reg.verified ? 'Unverify' : 'Verify'}
-                                                        </button>
+                            <div className="overflow-x-auto -mx-4 sm:mx-0">
+                                <div className="inline-block min-w-full align-middle">
+                                    <table className="min-w-full divide-y divide-gray-200">
+                                        <thead className="bg-gray-50">
+                                            <tr>
+                                                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                                                <th className="hidden sm:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID/Matric</th>
+                                                <th className="hidden md:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Department</th>
+                                                <th className="hidden sm:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Team</th>
+                                                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Level</th>
+                                                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="bg-white divide-y divide-gray-200">
+                                            {filteredRegistrations.length > 0 ? (
+                                                currentRegistrations.map((reg) => (
+                                                    <tr key={reg.id} className="hover:bg-gray-50">
+                                                        <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
+                                                            <div className="text-sm font-medium text-gray-900">{reg.fullName}</div>
+                                                            <div className="text-xs text-gray-500 sm:hidden">{reg.email}</div>
+                                                        </td>
+                                                        <td className="hidden sm:table-cell px-6 py-4 whitespace-nowrap">
+                                                            <div className="text-sm text-gray-500">{reg.matricNumber || 'N/A'}</div>
+                                                            <div className="text-xs text-gray-400">{reg.registrationId || reg.id.substring(0, 8)}</div>
+                                                        </td>
+                                                        <td className="hidden md:table-cell px-6 py-4 whitespace-nowrap">
+                                                            <div className="text-sm text-gray-500">{reg.department || 'N/A'}</div>
+                                                            <div className="text-xs text-gray-400">{reg.college || 'N/A'}</div>
+                                                        </td>
+                                                        <td className="hidden sm:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                            {reg.teamName || 'Individual'}
+                                                            {reg.teamName && (
+                                                                <div className="text-xs text-gray-400">Size: {reg.teamSize || '1'}</div>
+                                                            )}
+                                                        </td>
+                                                        <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
+                                                            <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                                                {reg.level || 'N/A'}
+                                                            </span>
+                                                        </td>
+                                                        <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
+                                                            <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${reg.verified ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
+                                                                {reg.verified ? 'Verified' : 'Pending'}
+                                                            </span>
+                                                        </td>
+                                                        <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-sm text-gray-500">
+                                                            <div className="flex space-x-2">
+                                                                <button
+                                                                    className="text-indigo-600 hover:text-indigo-900"
+                                                                    onClick={() => handleViewRegistration(reg)}
+                                                                >
+                                                                    View
+                                                                </button>
+                                                                <button
+                                                                    className={`${reg.verified ? 'text-amber-600 hover:text-amber-900' : 'text-green-600 hover:text-green-900'}`}
+                                                                    onClick={() => handleVerify(reg.id, reg.verified)}
+                                                                >
+                                                                    {reg.verified ? 'Unverify' : 'Verify'}
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                ))
+                                            ) : (
+                                                <tr>
+                                                    <td colSpan={7} className="px-6 py-4 text-center text-sm text-gray-500">
+                                                        No registrations found matching your search.
                                                     </td>
                                                 </tr>
-                                            ))
-                                        ) : (
-                                            <tr>
-                                                <td colSpan={7} className="px-6 py-4 text-center text-sm text-gray-500">
-                                                    No registrations found matching your search.
-                                                </td>
-                                            </tr>
-                                        )}
-                                    </tbody>
-                                </table>
+                                            )}
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
 
                             {/* Add pagination component */}
@@ -713,58 +717,60 @@ export function Analytics() {
                         </div>
 
                         {/* Recent Registrations */}
-                        <div className="bg-white rounded-xl shadow-sm p-6">
-                            <div className="flex items-center justify-between mb-6">
-                                <h2 className="text-lg font-semibold text-gray-800">Recent Registrations</h2>
+                        <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6">
+                            <div className="flex items-center justify-between mb-4 sm:mb-6">
+                                <h2 className="text-base sm:text-lg font-semibold text-gray-800">Recent Registrations</h2>
                                 <FaUsers className="text-blue-500" />
                             </div>
-                            <div className="overflow-x-auto">
-                                <table className="min-w-full divide-y divide-gray-200">
-                                    <thead>
-                                        <tr>
-                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Level</th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Team</th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="bg-white divide-y divide-gray-200">
-                                        {stats.recentRegistrations.map((reg) => (
-                                            <tr key={reg.id}>
-                                                <td className="px-6 py-4 whitespace-nowrap">
-                                                    <div className="text-sm font-medium text-gray-900">{reg.fullName}</div>
-                                                    <div className="text-sm text-gray-500">{reg.email}</div>
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-nowrap">
-                                                    <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                                                        {reg.level || 'N/A'}
-                                                    </span>
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                    {reg.teamName || 'Individual'}
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-nowrap">
-                                                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${reg.verified ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
-                                                        {reg.verified ? 'Verified' : 'Pending'}
-                                                    </span>
-                                                </td>
+                            <div className="overflow-x-auto -mx-4 sm:mx-0">
+                                <div className="inline-block min-w-full align-middle">
+                                    <table className="min-w-full divide-y divide-gray-200">
+                                        <thead>
+                                            <tr>
+                                                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                                                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Level</th>
+                                                <th className="hidden sm:table-cell px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Team</th>
+                                                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                                             </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody className="bg-white divide-y divide-gray-200">
+                                            {stats.recentRegistrations.map((reg) => (
+                                                <tr key={reg.id}>
+                                                    <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
+                                                        <div className="text-sm font-medium text-gray-900">{reg.fullName}</div>
+                                                        <div className="text-xs text-gray-500 sm:hidden">{reg.email}</div>
+                                                    </td>
+                                                    <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
+                                                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                                            {reg.level || 'N/A'}
+                                                        </span>
+                                                    </td>
+                                                    <td className="hidden sm:table-cell px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                        {reg.teamName || 'Individual'}
+                                                    </td>
+                                                    <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
+                                                        <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${reg.verified ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
+                                                            {reg.verified ? 'Verified' : 'Pending'}
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </>
                 )}
             </div>
 
-            {/* Registration Details Modal */}
+            {/* Registration Details Modal - Make it more mobile-friendly */}
             {showModal && selectedRegistration && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-                    <div className="bg-white rounded-xl shadow-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
-                        <div className="p-6">
-                            <div className="flex justify-between items-center mb-6">
-                                <h2 className="text-xl font-bold text-gray-800">Registration Details</h2>
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2 sm:p-4">
+                    <div className="bg-white rounded-xl shadow-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+                        <div className="p-4 sm:p-6">
+                            <div className="flex justify-between items-center mb-4 sm:mb-6">
+                                <h2 className="text-lg sm:text-xl font-bold text-gray-800">Registration Details</h2>
                                 <button
                                     onClick={closeModal}
                                     className="text-gray-500 hover:text-gray-700"
@@ -773,7 +779,7 @@ export function Analytics() {
                                 </button>
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                                 <div>
                                     <h3 className="text-lg font-semibold text-gray-700 mb-4">Personal Information</h3>
                                     <div className="space-y-3">
@@ -823,44 +829,10 @@ export function Analytics() {
                                 </div>
                             </div>
 
-                            <div className="mt-6">
-                                <h3 className="text-lg font-semibold text-gray-700 mb-4">Team Information</h3>
-                                <div className="space-y-3">
-                                    <div>
-                                        <p className="text-sm text-gray-500">Team Name</p>
-                                        <p className="text-base">{selectedRegistration.teamName || 'Individual Participant'}</p>
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-gray-500">Team Size</p>
-                                        <p className="text-base">{selectedRegistration.teamSize || '1'}</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="mt-6">
-                                <h3 className="text-lg font-semibold text-gray-700 mb-4">Project Information</h3>
-                                <div className="space-y-3">
-                                    <div>
-                                        <p className="text-sm text-gray-500">Project Idea</p>
-                                        <p className="text-base whitespace-pre-wrap">{selectedRegistration.projectIdea}</p>
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-gray-500">Skills</p>
-                                        <div className="flex flex-wrap gap-2 mt-1">
-                                            {selectedRegistration.skills && selectedRegistration.skills.map((skill, index) => (
-                                                <span key={index} className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
-                                                    {skill}
-                                                </span>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="mt-8 flex justify-end space-x-4">
+                            <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row justify-end gap-3 sm:space-x-4">
                                 <button
                                     onClick={closeModal}
-                                    className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                                    className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 w-full sm:w-auto"
                                 >
                                     Close
                                 </button>
@@ -869,7 +841,7 @@ export function Analytics() {
                                         handleVerify(selectedRegistration.id, selectedRegistration.verified);
                                         closeModal();
                                     }}
-                                    className={`px-4 py-2 rounded-md text-white ${selectedRegistration.verified ? 'bg-amber-600 hover:bg-amber-700' : 'bg-green-600 hover:bg-green-700'}`}
+                                    className={`px-4 py-2 rounded-md text-white w-full sm:w-auto ${selectedRegistration.verified ? 'bg-amber-600 hover:bg-amber-700' : 'bg-green-600 hover:bg-green-700'}`}
                                 >
                                     {selectedRegistration.verified ? 'Unverify Registration' : 'Verify Registration'}
                                 </button>
