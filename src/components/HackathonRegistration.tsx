@@ -55,7 +55,6 @@ export function HackathonRegistration() {
     const [currentRegistrationId, setCurrentRegistrationId] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [showIntro, setShowIntro] = useState(true);
-    const [shareSupported, setShareSupported] = useState(false);
 
     // Add settings state
     const [settings, setSettings] = useState({
@@ -107,7 +106,7 @@ export function HackathonRegistration() {
 
     // Check if Web Share API is supported
     useEffect(() => {
-        setShareSupported(!!navigator.share);
+        // We'll directly check in the handleShare function instead
     }, []);
 
     const [touched, setTouched] = useState({
@@ -196,7 +195,7 @@ export function HackathonRegistration() {
     // Handle share functionality
     const handleShare = async () => {
         try {
-            if (navigator.share) {
+            if (navigator && navigator.share) {
                 await navigator.share({
                     title: 'NACOS Hackathon 2025',
                     text: 'Join the NACOS Hackathon 2025! Code. Innovate. Transform.',
@@ -205,8 +204,12 @@ export function HackathonRegistration() {
                 toast.success('Thanks for sharing!');
             } else {
                 // Fallback for browsers that don't support sharing
-                navigator.clipboard.writeText(window.location.href);
-                toast.success('Link copied to clipboard!');
+                if (navigator.clipboard) {
+                    await navigator.clipboard.writeText(window.location.href);
+                    toast.success('Link copied to clipboard!');
+                } else {
+                    toast.error('Sharing not supported on this browser.');
+                }
             }
         } catch (error) {
             console.error('Error sharing:', error);
