@@ -271,11 +271,12 @@ export function HackathonRegistration() {
                         transition={{ delay: showIntro ? 3.2 : 0, duration: 0.5 }}
                     >
                         <div className="flex items-start gap-4">
-                            <div className=" text-white flex md:flex-row  md:w-[11rem] w-[9rem] flex-col gap-3 pl-2 md:pr- pr-2 py-2 md:pr-4  items-center  bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 ">
-                                <img src="/bot.png" alt="Bells University Logo" className=" object-cover size-[4rem]" />
-                                <h1>X</h1>
-                                <img src="/nacos-logo.png" alt="Bells University Logo" className=" object-cover size-[2rem]" />
-
+                            <div className="text-white flex items-center justify-center bg-none md:bg-white/10 backdrop-blur-sm rounded-xl border border-white/10 px-4 py-2 shadow-lg">
+                                <div className="flex md:flex-row flex-col items-center gap-2">
+                                    <img src="/bot.png" alt="Bot Logo" className="bg-white rounded-full p-1 shadow-md object-contain w-auto md:w-[7rem]" />
+                                    <span className="font-bold text-lg">×</span>
+                                    <img src="/nacos-logo.png" alt="NACOS Logo" className="object-cover w-8 h-8" />
+                                </div>
                             </div>
                             <div>
                                 <h1 className="text-5xl sm:text-3xl md:text-4xl font-bold mb-3 bg-gradient-to-r from-white to-green-400 bg-clip-text text-transparent">
