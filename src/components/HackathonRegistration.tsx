@@ -55,6 +55,7 @@ export function HackathonRegistration() {
     const [currentRegistrationId, setCurrentRegistrationId] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [showIntro, setShowIntro] = useState(true);
+    const [shareSupported, setShareSupported] = useState(false);
 
     // Add settings state
     const [settings, setSettings] = useState({
@@ -102,6 +103,11 @@ export function HackathonRegistration() {
         };
 
         fetchSettings();
+    }, []);
+
+    // Check if Web Share API is supported
+    useEffect(() => {
+        setShareSupported(!!navigator.share);
     }, []);
 
     const [touched, setTouched] = useState({
@@ -187,7 +193,29 @@ export function HackathonRegistration() {
 
     ];
 
-    // Add this for the QR code
+    // Handle share functionality
+    const handleShare = async () => {
+        try {
+            if (navigator.share) {
+                await navigator.share({
+                    title: 'NACOS Hackathon 2025',
+                    text: 'Join the NACOS Hackathon 2025! Code. Innovate. Transform.',
+                    url: window.location.href,
+                });
+                toast.success('Thanks for sharing!');
+            } else {
+                // Fallback for browsers that don't support sharing
+                navigator.clipboard.writeText(window.location.href);
+                toast.success('Link copied to clipboard!');
+            }
+        } catch (error) {
+            console.error('Error sharing:', error);
+            // User probably canceled the share
+            if (error instanceof Error && error.name !== 'AbortError') {
+                toast.error('Could not share, try copying the link instead.');
+            }
+        }
+    };
 
     return (
         <>
@@ -699,17 +727,23 @@ export function HackathonRegistration() {
                                 </div>
                             </div>
                             <div className="flex flex-col items-center">
-                                <div className="bg-gradient-to-br from-white/20 to-white/5 p-5 rounded-xl shadow-xl border border-white/20 backdrop-blur-md">
-                                    <div className="bg-white p-2 rounded-lg">
+                                <button
+                                    onClick={handleShare}
+                                    className="group bg-gradient-to-br from-white/20 to-white/5 p-5 rounded-xl shadow-xl border border-white/20 backdrop-blur-md hover:from-green-500/30 hover:to-green-600/20 transition-all duration-300 cursor-pointer"
+                                >
+                                    <div className="bg-white p-2 rounded-lg group-hover:shadow-lg transition-all duration-300">
                                         <img
                                             src="/qrcode.png"
                                             alt="Registration QR Code"
                                             className="w-[180px] h-[180px]"
                                         />
                                     </div>
-                                </div>
-                                <p className="text-green-300 text-sm mt-4 text-center font-medium">
-                                    Scan to share with friends
+                                </button>
+                                <p className="text-green-300 text-sm mt-4 text-center font-medium flex items-center justify-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                                    </svg>
+                                    Tap to share with your friends
                                 </p>
                             </div>
                         </div>
