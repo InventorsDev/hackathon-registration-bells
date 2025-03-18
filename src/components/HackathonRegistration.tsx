@@ -272,7 +272,7 @@ export function HackathonRegistration() {
                     >
                         <div className="flex items-start gap-4">
                             <div className=" text-white flex md:flex-row  md:w-[11rem] w-[9rem] flex-col gap-3 pl-2 md:pr- pr-2 py-2 md:pr-4  items-center  bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 ">
-                                <img src="/bells-logo.png" alt="Bells University Logo" className=" object-cover size-[4rem]" />
+                                <img src="/bot.png" alt="Bells University Logo" className=" object-cover size-[4rem]" />
                                 <h1>X</h1>
                                 <img src="/nacos-logo.png" alt="Bells University Logo" className=" object-cover size-[2rem]" />
 
