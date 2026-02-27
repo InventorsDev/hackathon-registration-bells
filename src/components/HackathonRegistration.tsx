@@ -33,6 +33,8 @@ interface RegistrationFormData {
     message?: string;
 }
 
+const hackathonName = "Professor Jeremiah Ojediran";
+
 export function HackathonRegistration() {
     const [formData, setFormData] = useState<RegistrationFormData>({
         fullName: '',
@@ -311,7 +313,7 @@ export function HackathonRegistration() {
                             </div>
                             <div>
                                 <h1 className="text-5xl sm:text-3xl md:text-4xl font-bold mb-3 bg-gradient-to-r from-white to-green-400 bg-clip-text text-transparent">
-                                    NACOS Hackathon {currentYear}
+                                    {hackathonName} Hackathon {currentYear}
                                 </h1>
                                 <p className="text-base sm:text-lg text-white/90 font-medium mb-2">Code. Innovate. Transform.</p>
                                 <div className="bg-white/5 backdrop-blur-sm rounded-xl p-3 sm:p-4 mt-4 border border-white/10">
@@ -533,7 +535,9 @@ export function HackathonRegistration() {
                                                 <option value="College of Management and Social Sciences" className="bg-black">College of Management and Social Sciences</option>
                                                 <option value="College of Engineering" className="bg-black">College of Engineering</option>
                                                 <option value="College of Environmental Sciences" className="bg-black">College of Environmental Sciences</option>
-                                                <option value="Others" className="bg-black">Others</option>
+                                                <option value="College of Computing" className="bg-black">College of Computing</option>
+                                                <option value="College of Food, Agricultural Science and Technology" className="bg-black">College of Food, Agricultural Science and Technology.</option>
+                                                {/* <option value="Others" className="bg-black">Others</option> */}
                                             </select>
                                             {getFieldError('college') && (
                                                 <p className="text-red-400 text-xs">{getFieldError('college')}</p>
