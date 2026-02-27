@@ -2,13 +2,13 @@ import { Dialog, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 import { FaCheckCircle, FaCopy, FaShare, FaWhatsapp } from 'react-icons/fa';
 import { toast } from 'react-hot-toast';
+import { currentYear } from '../utils/helpers';
 interface RegistrationSuccessPopupProps {
     isOpen: boolean;
     onClose: () => void;
     registrationId: string;
 }
 
-const currentYear = new Date().getFullYear();
 const WHATSAPP_GROUP_LINK = "https://chat.whatsapp.com/HackathonGroup";
 
 export function RegistrationSuccessPopup({ isOpen, onClose, registrationId }: RegistrationSuccessPopupProps) {

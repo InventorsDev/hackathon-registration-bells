@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { FaClock, FaMapMarkerAlt, FaLaptopCode, FaUserGraduate, FaLock, FaWhatsapp } from 'react-icons/fa';
 import { db } from '../services/firebase';
 import { toast } from 'react-hot-toast';
-import { generateRegistrationId } from '../utils/helpers';
+import { generateRegistrationId, currentYear } from '../utils/helpers';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { LoginPopup } from './LoginPopup';
 import { RegistrationSuccessPopup } from './RegistrationSuccessPopup';
@@ -28,8 +28,6 @@ interface RegistrationFormData {
     }[];
     message?: string;
 }
-
-const currentYear = new Date().getFullYear();
 
 export function HackathonRegistration() {
     const [formData, setFormData] = useState<RegistrationFormData>({

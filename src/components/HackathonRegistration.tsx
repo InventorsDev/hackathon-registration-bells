@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { FaClock, FaMapMarkerAlt, FaLock, FaWhatsapp, FaCode, FaTrophy, FaUsers, FaTwitter, FaInstagram, FaLinkedin, FaGithub } from 'react-icons/fa';
 import { db } from '../services/firebase';
 import { toast } from 'react-hot-toast';
-import { generateRegistrationId } from '../utils/helpers';
+import { generateRegistrationId, currentYear } from '../utils/helpers';
 import { addDoc, collection, serverTimestamp, doc, getDoc } from 'firebase/firestore';
 import { LoginPopup } from './LoginPopup';
 import { RegistrationSuccessPopup } from './RegistrationSuccessPopup';
@@ -32,8 +32,6 @@ interface RegistrationFormData {
     }[];
     message?: string;
 }
-
-const currentYear = new Date().getFullYear();
 
 export function HackathonRegistration() {
     const [formData, setFormData] = useState<RegistrationFormData>({
@@ -303,11 +301,11 @@ export function HackathonRegistration() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: showIntro ? 3.2 : 0, duration: 0.5 }}
                     >
-                        <div className="flex items-start gap-4">
+                        <div className="flex flex-col sm:flex-row items-start gap-4">
                             <div className="text-white flex items-center justify-center bg-none md:bg-white/10 backdrop-blur-sm rounded-xl border border-white/10 px-4 py-2 shadow-lg">
                                 <div className="flex md:flex-row flex-col items-center gap-2">
-                                    <img src="/bot.png" alt="Bot Logo" className="bg-white rounded-full p-1 shadow-md object-contain w-auto md:w-[7rem]" />
-                                    <span className="font-bold text-lg">×</span>
+                                    {/* <img src="/bot.png" alt="Bot Logo" className="bg-white rounded-full p-1 shadow-md object-contain w-auto md:w-[7rem]" />
+                                    <span className="font-bold text-lg">×</span> */}
                                     <img src="/nacos-logo.png" alt="NACOS Logo" className="object-cover w-8 h-8" />
                                 </div>
                             </div>
@@ -753,6 +751,43 @@ export function HackathonRegistration() {
                             </div>
                         </div>
 
+                        <div className="space-y-6 my-6 backdrop-blur-sm bg-white/5 p-6 rounded-2xl border border-white/10 shadow-xl">
+                            <h3 className="text-white text-2xl font-bold">Join the Inventors Community, Bells university</h3>
+                            <p className="text-white/70">
+                                The Inventors Community is a vibrant family of like-minded tech enthusiasts — <span className="font-bold px-2">writers, developers, designers, and innovators</span> 
+                                — united by a passion for growth and impact. We provide weekly mentorship, hands-on training, and valuable industry insights to help members sharpen their skills.
+                                It’s a platform to build, collaborate, and confidently communicate tech ideas.
+                                Together, we learn, build, and grow into world-class professionals. 🚀
+                            </p>
+                            <div className="flex flex-wrap gap-3 mt-4">
+                                <a 
+                                    href={"https://chat.whatsapp.com/GkTgPG4z5f4BcTd9lY3VcE"} 
+                                    className="flex items-center gap-2 bg-gradient-to-r from-green-500/90 to-green-600/90 hover:from-green-600 hover:to-green-700 transition-all px-4 py-2 rounded-lg text-white font-medium shadow-lg shadow-green-500/20 backdrop-blur-sm"
+                                >
+                                    <FaWhatsapp className="text-white" />
+                                    <span>Join WhatsApp Group</span>
+                                </a>
+                                <a 
+                                    href={'https://www.linkedin.com/company/inventors-community/'} 
+                                    rel='noopener noreferrer'
+                                    target="_blank"
+                                    className="flex items-center gap-2 bg-gradient-to-r from-blue-500/90 to-blue-600/90 hover:from-blue-600 hover:to-blue-700 transition-all px-4 py-2 rounded-lg text-white font-medium shadow-lg shadow-blue-500/20 backdrop-blur-sm"
+                                >
+                                    <FaLinkedin className="text-white" />
+                                    <span>Follow on LinkedIn</span>
+                                </a>
+                                <a 
+                                    href={'https://x.com/D_INVENTORS'} 
+                                    rel='noopener noreferrer'
+                                    target="_blank"
+                                    className="flex items-center gap-2 bg-gradient-to-r from-neutral-500/90 to-neutral-600/90 hover:from-neutral-600 hover:to-neutral-700 transition-all px-4 py-2 rounded-lg text-white font-medium shadow-lg shadow-neutral-500/20 backdrop-blur-sm"
+                                >
+                                    <FaTwitter className="text-white" />
+                                    <span>Follow on X</span>
+                                </a>
+                            </div>
+                        </div>
+
                         <div className="mt-12 py-8 bg-black/40 backdrop-blur-lg border-t border-white/10 rounded-t-3xl flex flex-col md:flex-row justify-between items-center px-6">
                             <div className="flex items-center gap-4 mb-6 md:mb-0">
                                 <div className="flex flex-col">
@@ -787,9 +822,9 @@ export function HackathonRegistration() {
                                     <span className="text-red-500">❤️</span>
                                 </div>
                                 <div className="flex items-center mx-1 md:mx-0">
-                                    <span className="text-white/70 text-xs md:text-sm mx-1">by</span>
+                                    <span className="text-white/70 text-xs md:text-sm mx-1">by the</span>
                                     <a
-                                        href="https://github.com/Olaoluwa-Adenle"
+                                        href="https://www.linkedin.com/company/inventors-community/"
                                         className="text-green-400 hover:text-green-300 transition-colors text-xs md:text-sm font-medium"
                                         target="_blank"
                                         rel="noopener noreferrer"

@@ -5,6 +5,7 @@ import { FaSave, FaWhatsapp, FaMapMarkerAlt, FaTrophy } from 'react-icons/fa';
 import { toast } from 'react-hot-toast';
 import { AdminLayout } from '../../components/AdminLayout';
 import { FaCog, FaCalendarAlt, FaCode, FaEnvelope, FaPhone, FaLink } from 'react-icons/fa';
+import { currentYear } from '../../utils/helpers';
 
 interface HackathonSettings {
     eventDate: string;
@@ -24,8 +25,6 @@ interface HackathonSettings {
         github: string;
     };
 }
-
-const currentYear = new Date().getFullYear();
 
 export function Settings() {
     const [loading, setLoading] = useState(true);

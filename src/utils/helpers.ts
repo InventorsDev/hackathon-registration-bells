@@ -15,4 +15,7 @@ export function validateEmail(email: string): boolean {
 export function validatePhone(phone: string): boolean {
     const re = /^\+?[1-9]\d{9,14}$/;
     return re.test(phone);
-} 
+}
+
+// current year constant used across the app
+export const currentYear = new Date().getFullYear(); 
