@@ -18,6 +18,8 @@ export const db = getFirestore(app);
 export const auth = getAuth(app);
 export const analytics = getAnalytics(app);
 
+const currentYear = new Date().getFullYear();
+
 // Initialize required collections
 const requiredCollections = ['registrations', 'messages', 'sessions', 'settings', 'teams', 'projects'];
 
@@ -39,11 +41,11 @@ export const initializeFirestore = async () => {
                         title: 'Organizing Committee',
                         email: 'nacos@example.com',
                         phone: '+2348012345678',
-                        bio: 'The official organizing committee for NACOS Hackathon 2025.'
+                        bio: `The official organizing committee for NACOS Hackathon ${currentYear}.`
                     },
                     hackathonDetails: {
-                        startDate: '2025-11-10',
-                        endDate: '2025-11-12',
+                        startDate: `${currentYear}-11-10`,
+                        endDate: `${currentYear}-11-12`,
                         theme: 'Innovation for the Future',
                         maxTeamSize: 4,
                         prizes: {

@@ -6,7 +6,6 @@ import { toast } from 'react-hot-toast';
 import { AdminLayout } from '../../components/AdminLayout';
 import { FaCog, FaCalendarAlt, FaCode, FaEnvelope, FaPhone, FaLink } from 'react-icons/fa';
 
-
 interface HackathonSettings {
     eventDate: string;
     eventTime: string;
@@ -25,6 +24,8 @@ interface HackathonSettings {
         github: string;
     };
 }
+
+const currentYear = new Date().getFullYear();
 
 export function Settings() {
     const [loading, setLoading] = useState(true);
@@ -155,7 +156,7 @@ export function Settings() {
                                     value={settings.eventDate}
                                     onChange={(e) => setSettings({ ...settings, eventDate: e.target.value })}
                                     className="w-full p-2 border border-gray-300 rounded-md"
-                                    placeholder="e.g., November 10-12, 2025 or Coming Soon..."
+                                    placeholder={`e.g., November 10-12, ${currentYear} or Coming Soon...`}
                                 />
                             </div>
                             <div>

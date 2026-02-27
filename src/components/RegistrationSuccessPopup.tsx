@@ -2,13 +2,13 @@ import { Dialog, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 import { FaCheckCircle, FaCopy, FaShare, FaWhatsapp } from 'react-icons/fa';
 import { toast } from 'react-hot-toast';
-
 interface RegistrationSuccessPopupProps {
     isOpen: boolean;
     onClose: () => void;
     registrationId: string;
 }
 
+const currentYear = new Date().getFullYear();
 const WHATSAPP_GROUP_LINK = "https://chat.whatsapp.com/HackathonGroup";
 
 export function RegistrationSuccessPopup({ isOpen, onClose, registrationId }: RegistrationSuccessPopupProps) {
@@ -21,10 +21,10 @@ export function RegistrationSuccessPopup({ isOpen, onClose, registrationId }: Re
     const handleInviteFriend = () => {
         const shareUrl = window.location.href;
         const text = encodeURIComponent(
-            `🚀 Join the NACOS Hackathon 2025!\n\n` +
+            `🚀 Join the NACOS Hackathon !\n\n` +
             `💻 Build innovative solutions\n` +
             `🏆 Win amazing prizes\n` +
-            `📅 November 10-12, 2025\n` +
+            `📅 November 10-12, ${currentYear}\n` +
             `📍 ICT Complex, Bells university of Technology\n\n` +
             `Register here: ${shareUrl}`
         );

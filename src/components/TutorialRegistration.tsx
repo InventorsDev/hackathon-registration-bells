@@ -29,6 +29,8 @@ interface RegistrationFormData {
     message?: string;
 }
 
+const currentYear = new Date().getFullYear();
+
 export function HackathonRegistration() {
     const [formData, setFormData] = useState<RegistrationFormData>({
         fullName: '',
@@ -184,7 +186,7 @@ export function HackathonRegistration() {
                                             <img src="/logo.png" alt="logo" className="w-12 h-12 sm:w-16 sm:h-16 object-contain" />
                                         </div>
                                         <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 bg-gradient-to-r from-white to-red-300 bg-clip-text text-transparent">
-                                            NACOS Hackathon 2025
+                                            NACOS Hackathon {currentYear}
                                         </h1>
                                         <div className="w-20 h-1 bg-purple-300 mx-auto mb-4 rounded-full"></div>
                                         <p className="text-base sm:text-lg text-white/90 font-medium mb-2">Code. Innovate. Transform.</p>
@@ -242,7 +244,7 @@ export function HackathonRegistration() {
                                                                         <span className="font-medium text-purple-100">Duration:</span> 2 hours per session
                                                                     </p>
                                                                     <p className="text-white text-xs sm:text-sm">
-                                                                        <span className="font-medium text-purple-100">Start Date:</span> February 2025
+                                                                        <span className="font-medium text-purple-100">Start Date:</span> February {currentYear}
                                                                     </p>
                                                                 </div>
                                                             </div>

@@ -33,6 +33,8 @@ interface RegistrationFormData {
     message?: string;
 }
 
+const currentYear = new Date().getFullYear();
+
 export function HackathonRegistration() {
     const [formData, setFormData] = useState<RegistrationFormData>({
         fullName: '',
@@ -197,8 +199,8 @@ export function HackathonRegistration() {
         try {
             if (navigator && navigator.share) {
                 await navigator.share({
-                    title: 'NACOS Hackathon 2025',
-                    text: 'Join the NACOS Hackathon 2025! Code. Innovate. Transform.',
+                    title: `NACOS Hackathon ${currentYear}`,
+                    text: `Join the NACOS Hackathon ${currentYear}! Code. Innovate. Transform.`,
                     url: window.location.href,
                 });
                 toast.success('Thanks for sharing!');
@@ -311,7 +313,7 @@ export function HackathonRegistration() {
                             </div>
                             <div>
                                 <h1 className="text-5xl sm:text-3xl md:text-4xl font-bold mb-3 bg-gradient-to-r from-white to-green-400 bg-clip-text text-transparent">
-                                    NACOS Hackathon 2025
+                                    NACOS Hackathon {currentYear}
                                 </h1>
                                 <p className="text-base sm:text-lg text-white/90 font-medium mb-2">Code. Innovate. Transform.</p>
                                 <div className="bg-white/5 backdrop-blur-sm rounded-xl p-3 sm:p-4 mt-4 border border-white/10">
@@ -755,7 +757,7 @@ export function HackathonRegistration() {
                             <div className="flex items-center gap-4 mb-6 md:mb-0">
                                 <div className="flex flex-col">
                                     <span className="text-white font-bold">NACOS Hackathon</span>
-                                    <span className="text-white/50 text-sm">© 2025 All rights reserved</span>
+                                    <span className="text-white/50 text-sm">© {currentYear} All rights reserved</span>
                                 </div>
                             </div>
 
