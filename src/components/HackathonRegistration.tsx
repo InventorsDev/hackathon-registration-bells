@@ -254,7 +254,7 @@ export function HackathonRegistration() {
                                         animate={{ y: 0, opacity: 1 }}
                                         transition={{ delay: 1.5, duration: 0.7 }}
                                     >
-                                        GET READY FOR
+                                        GET READY FOR THE
                                     </motion.h1>
 
                                     <motion.div
@@ -263,7 +263,7 @@ export function HackathonRegistration() {
                                         animate={{ scale: 1, opacity: 1 }}
                                         transition={{ delay: 2.0, duration: 0.7 }}
                                     >
-                                        NACOS HACKATHON
+                                        NACOS HACKATHON {currentYear}
                                     </motion.div>
 
                                     <motion.div
