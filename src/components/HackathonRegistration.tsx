@@ -126,13 +126,13 @@ export function HackathonRegistration() {
         // We'll directly check in the handleShare function instead
     }, []);
 
-    const [touched, setTouched] = useState({
-        college: false,
-        department: false,
-        matricNumber: false,
-        level: false,
-        areasOfAssistance: false
-    });
+    // const [touched, setTouched] = useState({
+    //     college: false,
+    //     department: false,
+    //     matricNumber: false,
+    //     level: false,
+    //     areasOfAssistance: false
+    // });
 
     // const getFieldError = (field: keyof typeof touched) => {
     //     if (touched[field] && !formData[field]) {
