@@ -7,10 +7,13 @@ interface Registration {
     id: string;
     fullName: string;
     email: string;
+    phoneNumber: string;
     teamName: string;
     teamSize: string;
     skills: string[];
     projectIdea: string;
+    memberDetails: string;
+    videoLink: string;
 }
 
 export function Teams() {
@@ -53,7 +56,7 @@ export function Teams() {
     return (
         <div className="p-4 sm:p-6 lg:p-8">
             <div className="max-w-7xl mx-auto">
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
                     <div>
                         <h1 className="text-2xl font-bold text-gray-800">Teams</h1>
                         <p className="text-sm text-gray-600">Manage hackathon teams</p>
@@ -72,11 +75,15 @@ export function Teams() {
                     </div>
                 </div>
 
-                {loading ? (
+                <p className='text-sm mb-3 text-gray-600'>Showing all <strong>{Object.keys(teams).length}</strong> teams</p>
+
+                {loading && (
                     <div className="flex justify-center items-center h-64">
                         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
                     </div>
-                ) : filteredTeams.length === 0 ? (
+                )}
+                 
+                {!loading && filteredTeams.length === 0 ? (
                     <div className="bg-white rounded-xl shadow-sm p-8 text-center">
                         <FaUsers className="text-4xl text-gray-300 mx-auto mb-4" />
                         <h3 className="text-lg font-medium text-gray-700 mb-2">No Teams Found</h3>
@@ -90,26 +97,37 @@ export function Teams() {
                             <div key={teamName} className="bg-white rounded-xl shadow-sm overflow-hidden">
                                 <div className="bg-green-600 px-6 py-4">
                                     <h3 className="text-lg font-semibold text-white">{teamName}</h3>
-                                    <p className="text-green-100 text-sm">{members.length} members</p>
+                                    <p className="text-green-100 text-sm">{members[0].teamSize} members</p>
                                 </div>
                                 <div className="p-6">
                                     <div className="mb-4">
                                         <h4 className="text-sm font-medium text-gray-500 mb-2">Project Idea</h4>
-                                        <p className="text-gray-700">{members[0]?.projectIdea || 'No project idea specified'}</p>
+                                        <p className="text-gray-700 text-sm">{members[0]?.projectIdea || 'No project idea specified'}</p>
                                     </div>
                                     <div className="mb-4">
-                                        <h4 className="text-sm font-medium text-gray-500 mb-2">Team Members</h4>
+                                        <h4 className="text-sm font-medium text-gray-500 mb-2">Team Lead</h4>
                                         <ul className="space-y-2">
                                             {members.map((member) => (
                                                 <li key={member.id} className="flex items-center justify-between">
-                                                    <div>
+                                                    <div className='space-y-1'>
                                                         <p className="font-medium text-gray-800">{member.fullName}</p>
                                                         <p className="text-xs text-gray-500">{member.email}</p>
+                                                        <p className="text-xs text-gray-500">{member.phoneNumber}</p>
                                                     </div>
                                                 </li>
                                             ))}
                                         </ul>
                                     </div>
+
+                                    <div className="mb-4">
+                                        <h4 className="text-sm font-medium text-gray-500 mb-2">Team Members</h4>
+                                        <ul className="space-y-2">
+                                            {members[0].memberDetails.split(",").map((member, index) => (
+                                                <p key={member + index} className="text-sm text-gray-600">{member}</p>
+                                            ))}
+                                        </ul>
+                                    </div>
+
                                     <div>
                                         <h4 className="text-sm font-medium text-gray-500 mb-2">Skills</h4>
                                         <div className="flex flex-wrap gap-2">
@@ -120,6 +138,20 @@ export function Teams() {
                                                 >
                                                     {skill}
                                                 </span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    
+                                    <div className='my-2'>
+                                        <h4 className="text-sm font-medium text-gray-500 mb-2">Presentation Video</h4>
+                                        <div className="flex flex-wrap gap-2">
+                                            {members.map((member) => (
+                                                <a 
+                                                    key={member.id} href={member.videoLink} target="_blank" rel="noopener noreferrer"
+                                                    className='text-xs text-blue-600 hover:underline'
+                                                >
+                                                    {member.videoLink}
+                                                </a>
                                             ))}
                                         </div>
                                     </div>

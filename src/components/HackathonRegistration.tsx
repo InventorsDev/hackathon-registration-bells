@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { FaClock, FaMapMarkerAlt, FaLock, FaWhatsapp, FaCode, FaTrophy, FaUsers, FaTwitter, FaInstagram, FaLinkedin, FaGithub } from 'react-icons/fa';
+import { FaClock, FaBookmark, FaMapMarkerAlt, FaLock, FaWhatsapp, FaCode, FaTrophy, FaUsers, FaTwitter, FaInstagram, FaLinkedin, FaGithub } from 'react-icons/fa';
 import { db } from '../services/firebase';
 import { toast } from 'react-hot-toast';
 import { generateRegistrationId, currentYear } from '../utils/helpers';
@@ -15,14 +15,16 @@ interface RegistrationFormData {
     email: string;
     phoneNumber: string;
     institution: string;
-    college: string;
-    otherCollege?: string;
-    department: string;
-    matricNumber: string;
-    level: '100' | '200' | '300' | '400' | '500' | '';
+    // college: string;
+    // otherCollege?: string;
+    // department: string;
+    // matricNumber: string;
+    // level: '100' | '200' | '300' | '400' | '500' | '';
     teamName: string;
     teamSize: string;
+    memberDetails: string;
     projectIdea: string;
+    videoLink: string;
     skills: string[];
     registrationId?: string;
     verified?: boolean;
@@ -41,17 +43,30 @@ export function HackathonRegistration() {
         email: '',
         phoneNumber: '',
         institution: 'Bells University of Technology',
-        college: '',
-        otherCollege: '',
-        department: '',
-        matricNumber: '',
-        level: '',
         teamName: '',
-        teamSize: '1',
+        teamSize: '2',
+        memberDetails: '',
         projectIdea: '',
         skills: [],
         areasOfAssistance: [],
+        videoLink: ""
     });
+    // const [formData, setFormData] = useState<RegistrationFormData>({
+    //     fullName: '',
+    //     email: '',
+    //     phoneNumber: '',
+    //     institution: 'Bells University of Technology',
+    //     college: '',
+    //     otherCollege: '',
+    //     department: '',
+    //     matricNumber: '',
+    //     level: '',
+    //     teamName: '',
+    //     teamSize: '1',
+    //     projectIdea: '',
+    //     skills: [],
+    //     areasOfAssistance: [],
+    // });
     const [isLoginOpen, setIsLoginOpen] = useState(false);
     const [isSuccessOpen, setIsSuccessOpen] = useState(false);
     const [currentRegistrationId, setCurrentRegistrationId] = useState('');
@@ -119,12 +134,12 @@ export function HackathonRegistration() {
         areasOfAssistance: false
     });
 
-    const getFieldError = (field: keyof typeof touched) => {
-        if (touched[field] && !formData[field]) {
-            return 'This field is required';
-        }
-        return '';
-    };
+    // const getFieldError = (field: keyof typeof touched) => {
+    //     if (touched[field] && !formData[field]) {
+    //         return 'This field is required';
+    //     }
+    //     return '';
+    // };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -136,7 +151,7 @@ export function HackathonRegistration() {
             // If "Others" is selected, use the otherCollege value
             const finalFormData = {
                 ...formData,
-                college: formData.college === 'Others' ? formData.otherCollege : formData.college,
+                // college: formData.college === 'Others' ? formData.otherCollege : formData.college,
                 registrationId: regId,
                 verified: false,
                 timestamp: serverTimestamp()
@@ -162,16 +177,18 @@ export function HackathonRegistration() {
                 email: '',
                 phoneNumber: '',
                 institution: 'Bells University of Technology',
-                college: '',
-                otherCollege: '',
-                department: '',
-                matricNumber: '',
-                level: '',
+                // college: '',
+                // otherCollege: '',
+                // department: '',
+                // matricNumber: '',
+                // level: '',
                 teamName: '',
                 teamSize: '1',
+                memberDetails: '',
                 projectIdea: '',
                 skills: [],
                 areasOfAssistance: [],
+                videoLink: ''
             });
             toast.success('Registration successful!');
         } catch (error) {
@@ -305,10 +322,10 @@ export function HackathonRegistration() {
                     >
                         <div className="flex flex-col sm:flex-row items-start gap-4">
                             <div className="text-white flex items-center justify-center bg-none md:bg-white/10 backdrop-blur-sm rounded-xl border border-white/10 px-4 py-2 shadow-lg">
-                                <div className="flex md:flex-row flex-col items-center gap-2">
-                                    {/* <img src="/bot.png" alt="Bot Logo" className="bg-white rounded-full p-1 shadow-md object-contain w-auto md:w-[7rem]" />
-                                    <span className="font-bold text-lg">×</span> */}
-                                    <img src="/nacos-logo.png" alt="NACOS Logo" className="object-cover w-8 h-8" />
+                                <div className="flex sm:flex-col lg:flex-row items-center gap-2">
+                                    <img src="/bot.png" alt="Bot Logo" className="size-14 rounded-full p-1 shadow-md object-contain w-auto md:w-[7rem]" />
+                                    <span className="font-bold text-lg">×</span>
+                                    <img src="/nacos-logo.png" alt="NACOS Logo" className="object-cover size-14" />
                                 </div>
                             </div>
                             <div>
@@ -385,13 +402,27 @@ export function HackathonRegistration() {
 
                                     <div className="flex items-start gap-4">
                                         <div className="bg-green-500/20 p-3 rounded-lg">
+                                            <FaBookmark className="text-xl" />
+                                        </div>
+                                        <div>
+                                            <h3 className="font-semibold text-lg">Theme</h3>
+                                            <p className='text-white/80 text-sm'>
+                                                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sed hic itaque provident a quibusdam. 
+                                                Perspiciatis ex laudantium explicabo molestiae optio fugit illum consectetur, officia quos sapiente iste nam nihil repellendus!
+                                            </p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="flex items-start gap-4">
+                                        <div className="bg-green-500/20 p-3 rounded-lg">
                                             <FaCode className="text-xl" />
                                         </div>
                                         <div>
-                                            <h3 className="font-semibold text-lg">Themes</h3>
+                                            <h3 className="font-semibold text-lg">Areas of Concern</h3>
                                             {settings.themes.map((theme, index) => (
                                                 <p key={index} className="text-white/80 text-sm">{theme}</p>
                                             ))}
+                                            
                                         </div>
                                     </div>
 
@@ -491,6 +522,7 @@ export function HackathonRegistration() {
                                                 required
                                             />
                                         </div>
+
                                         <div className="space-y-3">
                                             <label className="text-sm font-medium text-white">
                                                 Institution <span className="text-red-400">*</span>
@@ -502,6 +534,15 @@ export function HackathonRegistration() {
                                                 disabled
                                             />
                                         </div>
+
+                                        {/* 
+                                        ========================================================================================
+
+                                            Student Academic details taken out
+                                        _______________________________________________________________________________________
+                                        */}
+
+                                        {/* 
                                         <div className="space-y-3">
                                             <label className="text-sm font-medium text-white">
                                                 Matric Number <span className="text-red-400">*</span>
@@ -537,7 +578,7 @@ export function HackathonRegistration() {
                                                 <option value="College of Environmental Sciences" className="bg-black">College of Environmental Sciences</option>
                                                 <option value="College of Computing" className="bg-black">College of Computing</option>
                                                 <option value="College of Food, Agricultural Science and Technology" className="bg-black">College of Food, Agricultural Science and Technology.</option>
-                                                {/* <option value="Others" className="bg-black">Others</option> */}
+                                                <option value="Others" className="bg-black">Others</option>
                                             </select>
                                             {getFieldError('college') && (
                                                 <p className="text-red-400 text-xs">{getFieldError('college')}</p>
@@ -596,7 +637,9 @@ export function HackathonRegistration() {
                                             {getFieldError('level') && (
                                                 <p className="text-red-500 text-xs mt-1">{getFieldError('level')}</p>
                                             )}
-                                        </div>
+                                        </div> */}
+
+
                                         <div className="space-y-3">
                                             <label className="text-sm font-medium text-white">
                                                 Team Name <span className="text-red-400">*</span>
@@ -609,9 +652,9 @@ export function HackathonRegistration() {
                                                 className="w-full px-4 py-3 rounded-xl bg-white/10 border-2 border-white/20 text-white placeholder-gray-400 focus:border-green-500 focus:ring-green-500/20 transition-all"
                                                 required
                                             />
-                                            <p className="text-xs text-green-300 italic">
+                                            {/* <p className="text-xs text-green-300 italic">
                                                 All team members must use the exact same team name when registering.
-                                            </p>
+                                            </p> */}
                                         </div>
                                     </div>
 
@@ -625,14 +668,27 @@ export function HackathonRegistration() {
                                             className="w-full px-4 py-3 rounded-xl bg-white/10 border-2 border-white/20 text-white focus:border-green-500 focus:ring-green-500/20 transition-all"
                                             required
                                         >
-                                            <option value="1" className="bg-black">Individual (1 person)</option>
+                                            {/* <option value="1" className="bg-black">Individual (1 person)</option> */}
                                             <option value="2" className="bg-black">2 members</option>
                                             <option value="3" className="bg-black">3 members</option>
                                             <option value="4" className="bg-black">4 members</option>
                                         </select>
-                                        <p className="text-xs text-green-300 italic">
+                                        {/* <p className="text-xs text-green-300 italic">
                                             All team members should select the same team size.
-                                        </p>
+                                        </p> */}
+                                    </div>
+
+                                    <div className="space-y-3">
+                                        <label className="text-sm font-medium text-white">
+                                            Member Details (Name & email) <span className="text-red-400">*</span>
+                                        </label>
+                                        <textarea
+                                            value={formData.memberDetails}
+                                            onChange={(e) => setFormData({ ...formData, memberDetails: e.target.value })}
+                                            placeholder="Enter member details (name and email) for each member in the format: John Doe - john.doe@example.com"
+                                            className="w-full px-4 py-3 rounded-xl bg-white/10 border-2 border-white/20 text-white placeholder-gray-400 focus:border-green-500 focus:ring-green-500/20 transition-all min-h-[100px]"
+                                            required
+                                        />
                                     </div>
 
                                     <div className="space-y-3">
@@ -663,6 +719,20 @@ export function HackathonRegistration() {
 
                                     <div className="space-y-3">
                                         <label className="text-sm font-medium text-white">
+                                            Link to Presentation Video <span className="text-red-400">*</span>
+                                        </label>
+                                        <input
+                                            type="url"
+                                            value={formData.videoLink}
+                                            onChange={(e) => setFormData({ ...formData, videoLink: e.target.value })}
+                                            placeholder="Each team is expected to make a video not exceeding 2mins talking about their ideas and submit the link here (e.g., use Loom or YouTube)"
+                                            className="w-full px-4 py-3 rounded-xl bg-white/10 border-2 border-white/20 text-white placeholder-gray-400 focus:border-green-500 focus:ring-green-500/20 transition-all"
+                                            required
+                                        />
+                                    </div>
+
+                                    <div className="space-y-3">
+                                        <label className="text-sm font-medium text-white">
                                             Additional Message
                                         </label>
                                         <textarea
@@ -680,10 +750,10 @@ export function HackathonRegistration() {
                                             <span className="font-semibold">Team Registration Instructions:</span>
                                         </p>
                                         <ul className="list-disc pl-8 space-y-1">
-                                            <li>Every team member (including the team captain) must register individually.</li>
-                                            <li>All team members must use the exact same team name in their registration.</li>
-                                            <li>Team size should be consistent across all team member registrations.</li>
-                                            <li>Each team member should specify their own skills and information.</li>
+                                            <li>A team will be registered by the team lead who fills in the details of other members.</li>
+                                            <li>A team should consist of 3-4 members including team lead.</li>
+                                            <li>A team should ideally consist of software engineers, designers and a project manager.</li>
+                                            <li>The video submission should be a link to a presentation video using loom (max. 2mins) </li>
                                         </ul>
                                     </div>
 
@@ -692,8 +762,7 @@ export function HackathonRegistration() {
                                             <span className="text-green-400">⚠️</span>
                                             <span>
                                                 <strong>Important:</strong> After registration, join our WhatsApp group for updates and important announcements.
-                                                Remember that each team member must register individually with the same team name.
-                                                Inconsistent team information may affect your registration status.
+                                                Wish you productive efforts through this hackathon, stay hacking! 😉
                                             </span>
                                         </p>
                                     </div>

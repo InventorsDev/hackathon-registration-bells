@@ -8,6 +8,7 @@ interface Project {
     id: string;
     teamName: string;
     projectIdea: string;
+    videoLink: string;
     skills: string[];
     members: number;
     rating?: number;
@@ -38,6 +39,7 @@ export function Projects() {
                         id: doc.id,
                         teamName,
                         projectIdea: data.projectIdea || 'No project idea specified',
+                        videoLink: data.videoLink || "",
                         skills: data.skills || [],
                         members: 1,
                         rating: data.rating
@@ -93,11 +95,13 @@ export function Projects() {
                     </div>
                 </div>
 
-                {loading ? (
+                {loading && (
                     <div className="flex justify-center items-center h-64">
                         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
                     </div>
-                ) : filteredProjects.length === 0 ? (
+                )}
+                
+                {!loading && filteredProjects.length === 0 ? (
                     <div className="bg-white rounded-xl shadow-sm p-8 text-center">
                         <FaCode className="text-4xl text-gray-300 mx-auto mb-4" />
                         <h3 className="text-lg font-medium text-gray-700 mb-2">No Projects Found</h3>
@@ -128,8 +132,8 @@ export function Projects() {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="p-6">
-                                    <div className="mb-4">
+                                <div className="p-6 space-y-4">
+                                    <div>
                                         <h4 className="text-sm font-medium text-gray-500 mb-2">Project Idea</h4>
                                         <p className="text-gray-700">{project.projectIdea}</p>
                                     </div>
@@ -145,6 +149,12 @@ export function Projects() {
                                                 </span>
                                             ))}
                                         </div>
+                                    </div>
+                                    <div>
+                                        <h4 className="text-sm font-medium text-gray-500 mb-2">Presentation Video</h4>
+                                        <a href={project.videoLink} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-500 hover:underline">
+                                            {project.videoLink}    
+                                        </a>
                                     </div>
                                 </div>
                             </div>

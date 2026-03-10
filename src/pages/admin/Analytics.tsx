@@ -430,75 +430,6 @@ export function Analytics() {
 
                         {/* Detailed Analytics */}
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
-                            {/* Level Distribution */}
-                            <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6">
-                                <div className="flex items-center justify-between mb-4 sm:mb-6">
-                                    <h2 className="text-base sm:text-lg font-semibold text-gray-800">Level Distribution</h2>
-                                    <FaGraduationCap className="text-blue-500" />
-                                </div>
-                                <div className="space-y-4">
-                                    <div>
-                                        <div className="flex justify-between mb-1">
-                                            <span className="text-sm text-gray-600">100 Level</span>
-                                            <span className="text-sm font-medium text-gray-800">{stats.level100Count}</span>
-                                        </div>
-                                        <div className="w-full bg-gray-200 rounded-full h-2">
-                                            <div
-                                                className="bg-blue-500 h-2 rounded-full"
-                                                style={{ width: `${stats.totalRegistrations ? (stats.level100Count / stats.totalRegistrations) * 100 : 0}%` }}
-                                            ></div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div className="flex justify-between mb-1">
-                                            <span className="text-sm text-gray-600">200 Level</span>
-                                            <span className="text-sm font-medium text-gray-800">{stats.level200Count}</span>
-                                        </div>
-                                        <div className="w-full bg-gray-200 rounded-full h-2">
-                                            <div
-                                                className="bg-green-500 h-2 rounded-full"
-                                                style={{ width: `${stats.totalRegistrations ? (stats.level200Count / stats.totalRegistrations) * 100 : 0}%` }}
-                                            ></div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div className="flex justify-between mb-1">
-                                            <span className="text-sm text-gray-600">300 Level</span>
-                                            <span className="text-sm font-medium text-gray-800">{stats.level300Count}</span>
-                                        </div>
-                                        <div className="w-full bg-gray-200 rounded-full h-2">
-                                            <div
-                                                className="bg-purple-500 h-2 rounded-full"
-                                                style={{ width: `${stats.totalRegistrations ? (stats.level300Count / stats.totalRegistrations) * 100 : 0}%` }}
-                                            ></div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div className="flex justify-between mb-1">
-                                            <span className="text-sm text-gray-600">400 Level</span>
-                                            <span className="text-sm font-medium text-gray-800">{stats.level400Count}</span>
-                                        </div>
-                                        <div className="w-full bg-gray-200 rounded-full h-2">
-                                            <div
-                                                className="bg-yellow-500 h-2 rounded-full"
-                                                style={{ width: `${stats.totalRegistrations ? (stats.level400Count / stats.totalRegistrations) * 100 : 0}%` }}
-                                            ></div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div className="flex justify-between mb-1">
-                                            <span className="text-sm text-gray-600">500 Level</span>
-                                            <span className="text-sm font-medium text-gray-800">{stats.level500Count}</span>
-                                        </div>
-                                        <div className="w-full bg-gray-200 rounded-full h-2">
-                                            <div
-                                                className="bg-red-500 h-2 rounded-full"
-                                                style={{ width: `${stats.totalRegistrations ? (stats.level500Count / stats.totalRegistrations) * 100 : 0}%` }}
-                                            ></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
 
                             {/* Participation Type */}
                             <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6">
@@ -616,6 +547,77 @@ export function Analytics() {
                                 </div>
                             </div>
                         </div>
+
+                        {/* Level Distribution */}
+                        <div className="bg-white rounded-xl my-4 shadow-sm p-4 sm:p-6">
+                            <div className="flex items-center justify-between mb-4 sm:mb-6">
+                                <h2 className="text-base sm:text-lg font-semibold text-gray-800">Level Distribution</h2>
+                                <FaGraduationCap className="text-blue-500" />
+                            </div>
+                            <div className="space-y-4">
+                                <div>
+                                    <div className="flex justify-between mb-1">
+                                        <span className="text-sm text-gray-600">100 Level</span>
+                                        <span className="text-sm font-medium text-gray-800">{stats.level100Count}</span>
+                                    </div>
+                                    <div className="w-full bg-gray-200 rounded-full h-2">
+                                        <div
+                                            className="bg-blue-500 h-2 rounded-full"
+                                            style={{ width: `${stats.totalRegistrations ? (stats.level100Count / stats.totalRegistrations) * 100 : 0}%` }}
+                                        ></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div className="flex justify-between mb-1">
+                                        <span className="text-sm text-gray-600">200 Level</span>
+                                        <span className="text-sm font-medium text-gray-800">{stats.level200Count}</span>
+                                    </div>
+                                    <div className="w-full bg-gray-200 rounded-full h-2">
+                                        <div
+                                            className="bg-green-500 h-2 rounded-full"
+                                            style={{ width: `${stats.totalRegistrations ? (stats.level200Count / stats.totalRegistrations) * 100 : 0}%` }}
+                                        ></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div className="flex justify-between mb-1">
+                                        <span className="text-sm text-gray-600">300 Level</span>
+                                        <span className="text-sm font-medium text-gray-800">{stats.level300Count}</span>
+                                    </div>
+                                    <div className="w-full bg-gray-200 rounded-full h-2">
+                                        <div
+                                            className="bg-purple-500 h-2 rounded-full"
+                                            style={{ width: `${stats.totalRegistrations ? (stats.level300Count / stats.totalRegistrations) * 100 : 0}%` }}
+                                        ></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div className="flex justify-between mb-1">
+                                        <span className="text-sm text-gray-600">400 Level</span>
+                                        <span className="text-sm font-medium text-gray-800">{stats.level400Count}</span>
+                                    </div>
+                                    <div className="w-full bg-gray-200 rounded-full h-2">
+                                        <div
+                                            className="bg-yellow-500 h-2 rounded-full"
+                                            style={{ width: `${stats.totalRegistrations ? (stats.level400Count / stats.totalRegistrations) * 100 : 0}%` }}
+                                        ></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div className="flex justify-between mb-1">
+                                        <span className="text-sm text-gray-600">500 Level</span>
+                                        <span className="text-sm font-medium text-gray-800">{stats.level500Count}</span>
+                                    </div>
+                                    <div className="w-full bg-gray-200 rounded-full h-2">
+                                        <div
+                                            className="bg-red-500 h-2 rounded-full"
+                                            style={{ width: `${stats.totalRegistrations ? (stats.level500Count / stats.totalRegistrations) * 100 : 0}%` }}
+                                        ></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
 
                         {/* All Registrations with Search */}
                         <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 mb-6 sm:mb-8">
