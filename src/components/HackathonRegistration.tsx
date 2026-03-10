@@ -685,7 +685,7 @@ export function HackathonRegistration() {
                                         <textarea
                                             value={formData.memberDetails}
                                             onChange={(e) => setFormData({ ...formData, memberDetails: e.target.value })}
-                                            placeholder="Enter member details (name and email) for each member in the format: John Doe - john.doe@example.com"
+                                            placeholder="Enter name and email for each member separated by comma in the format: John Doe - johndoe@example.com, Jon Snow - jon.snow@example.com"
                                             className="w-full px-4 py-3 rounded-xl bg-white/10 border-2 border-white/20 text-white placeholder-gray-400 focus:border-green-500 focus:ring-green-500/20 transition-all min-h-[100px]"
                                             required
                                         />
@@ -725,7 +725,7 @@ export function HackathonRegistration() {
                                             type="url"
                                             value={formData.videoLink}
                                             onChange={(e) => setFormData({ ...formData, videoLink: e.target.value })}
-                                            placeholder="Each team is expected to make a video not exceeding 2mins talking about their ideas and submit the link here (e.g., use Loom or YouTube)"
+                                            placeholder="Submit link to video presentation (max. 2mins) talking about the project idea (e.g., use Loom or YouTube)"
                                             className="w-full px-4 py-3 rounded-xl bg-white/10 border-2 border-white/20 text-white placeholder-gray-400 focus:border-green-500 focus:ring-green-500/20 transition-all"
                                             required
                                         />
