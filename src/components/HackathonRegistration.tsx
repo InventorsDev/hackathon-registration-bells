@@ -44,7 +44,7 @@ export function HackathonRegistration() {
         phoneNumber: '',
         institution: 'Bells University of Technology',
         teamName: '',
-        teamSize: '2',
+        teamSize: '3',
         memberDetails: '',
         projectIdea: '',
         skills: [],
@@ -183,7 +183,7 @@ export function HackathonRegistration() {
                 // matricNumber: '',
                 // level: '',
                 teamName: '',
-                teamSize: '1',
+                teamSize: '3',
                 memberDetails: '',
                 projectIdea: '',
                 skills: [],
@@ -449,7 +449,7 @@ export function HackathonRegistration() {
                                             <h3 className="font-semibold text-lg">Eligibility</h3>
                                             <p className="text-white/80 text-sm">All Levels (100-500)
                                                 <br /> from any Departments</p>
-                                            <p className="text-white/80 text-sm">Teams of 1-4 students</p>
+                                            <p className="text-white/80 text-sm">Teams of 3-4 students</p>
                                         </div>
                                     </div>
                                 </div>
@@ -485,7 +485,7 @@ export function HackathonRegistration() {
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                         <div className="space-y-3">
                                             <label className="text-sm font-medium text-white">
-                                                Full Name <span className="text-red-400">*</span>
+                                                Team Lead Full Name <span className="text-red-400">*</span>
                                             </label>
                                             <input
                                                 type="text"
@@ -498,7 +498,7 @@ export function HackathonRegistration() {
                                         </div>
                                         <div className="space-y-3">
                                             <label className="text-sm font-medium text-white">
-                                                Email <span className="text-red-400">*</span>
+                                                Team Lead Email <span className="text-red-400">*</span>
                                             </label>
                                             <input
                                                 type="email"
@@ -511,7 +511,7 @@ export function HackathonRegistration() {
                                         </div>
                                         <div className="space-y-3">
                                             <label className="text-sm font-medium text-white">
-                                                Phone Number <span className="text-red-400">*</span>
+                                                Team Lead Phone Number <span className="text-red-400">*</span>
                                             </label>
                                             <input
                                                 type="tel"
@@ -669,7 +669,6 @@ export function HackathonRegistration() {
                                             required
                                         >
                                             {/* <option value="1" className="bg-black">Individual (1 person)</option> */}
-                                            <option value="2" className="bg-black">2 members</option>
                                             <option value="3" className="bg-black">3 members</option>
                                             <option value="4" className="bg-black">4 members</option>
                                         </select>
@@ -685,7 +684,7 @@ export function HackathonRegistration() {
                                         <textarea
                                             value={formData.memberDetails}
                                             onChange={(e) => setFormData({ ...formData, memberDetails: e.target.value })}
-                                            placeholder="Enter name and email for each member separated by comma in the format: John Doe - johndoe@example.com, Jon Snow - jon.snow@example.com"
+                                            placeholder="Enter name, email & phone number for each member separated by comma in the format: John Doe - johndoe@example.com - 09029200000, Jon Snow - jon.snow@example.com - 09029200001, etc"
                                             className="w-full px-4 py-3 rounded-xl bg-white/10 border-2 border-white/20 text-white placeholder-gray-400 focus:border-green-500 focus:ring-green-500/20 transition-all min-h-[100px]"
                                             required
                                         />
@@ -762,6 +761,7 @@ export function HackathonRegistration() {
                                             <span className="text-green-400">⚠️</span>
                                             <span>
                                                 <strong>Important:</strong> After registration, join our WhatsApp group for updates and important announcements.
+                                                Team leads should also share the WhatsApp link to other members of their team to ensure everyone stays informed.
                                                 Wish you productive efforts through this hackathon, stay hacking! 😉
                                             </span>
                                         </p>
