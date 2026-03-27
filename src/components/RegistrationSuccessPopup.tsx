@@ -1,7 +1,10 @@
+import { useState, useEffect } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 import { FaCheckCircle, FaCopy, FaShare, FaWhatsapp } from 'react-icons/fa';
 import { toast } from 'react-hot-toast';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../services/firebase';
 import { currentYear } from '../utils/helpers';
 interface RegistrationSuccessPopupProps {
     isOpen: boolean;
@@ -9,9 +12,46 @@ interface RegistrationSuccessPopupProps {
     registrationId: string;
 }
 
-const WHATSAPP_GROUP_LINK = "https://chat.whatsapp.com/HackathonGroup";
+// const WHATSAPP_GROUP_LINK = "https://chat.whatsapp.com/HackathonGroup";
 
 export function RegistrationSuccessPopup({ isOpen, onClose, registrationId }: RegistrationSuccessPopupProps) {
+    const [settings, setSettings] = useState({
+        eventDate: 'Coming Soon...',
+        eventTime: '',
+        venue: 'Bells University of Technology',
+        venueAddress: 'Ota, Ogun-state, Nigeria.',
+        themes: ['FinTech Solutions', 'HealthTech Innovations', 'EdTech Platforms', 'Sustainable Development'],
+        prizes: ['1st Place: ₦500,000', '2nd Place: ₦300,000', '3rd Place: ₦150,000', '+ Internship Opportunities'],
+        contactEmail: 'nacos.hackathon@example.com',
+        contactPhone: '+234 800 NACOS HACK',
+        registrationEnabled: true,
+        whatsappLink: '#',
+        socialLinks: {
+            twitter: '#',
+            instagram: '#',
+            linkedin: '#',
+            github: '#'
+        }
+    });
+
+    // Fetch settings from Firebase
+    useEffect(() => {
+        const fetchSettings = async () => {
+            try {
+                const settingsDoc = await getDoc(doc(db, 'settings', 'hackathon'));
+                if (settingsDoc.exists()) {
+                    setSettings(prevSettings => ({
+                        ...prevSettings,
+                        ...settingsDoc.data()
+                    }));
+                }
+            } catch (error) {
+                console.error('Error fetching settings:', error);
+            }
+        };
+
+        fetchSettings();
+    }, []);
 
     const handleCopyRegistrationId = () => {
         navigator.clipboard.writeText(registrationId);
@@ -22,17 +62,17 @@ export function RegistrationSuccessPopup({ isOpen, onClose, registrationId }: Re
         const shareUrl = window.location.href;
         const text = encodeURIComponent(
             `🚀 Join the NACOS Pitchathon !\n\n` +
-            `💻 Build innovative solutions\n` +
+            `💻 Pitch and Build innovative solutions\n` +
             `🏆 Win amazing prizes\n` +
-            `📅 November 10-12, ${currentYear}\n` +
-            `📍 ICT Complex, Bells university of Technology\n\n` +
+            `📅 May, ${currentYear}\n` +
+            `📍 Bells university of Technology\n\n` +
             `Register here: ${shareUrl}`
         );
         window.open(`https://wa.me/?text=${text}`, '_blank');
     };
 
     const handleJoinCommunity = () => {
-        window.open(WHATSAPP_GROUP_LINK, '_blank');
+        window.open(settings.whatsappLink, '_blank');
     };
 
     return (

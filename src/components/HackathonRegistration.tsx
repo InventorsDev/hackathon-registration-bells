@@ -774,7 +774,7 @@ export function HackathonRegistration() {
                                     <button
                                         type="submit"
                                         disabled={isSubmitting || !settings.registrationEnabled}
-                                        className="w-full bg-gradient-to-r from-green-600 to-green-500 text-white py-3 sm:py-4 px-6 rounded-xl hover:from-green-700 hover:to-green-600 transition-all duration-300 font-semibold text-base sm:text-lg mt-6 sm:mt-8 shadow-lg shadow-green-900/50 hover:shadow-xl hover:shadow-green-900/70 disabled:opacity-50"
+                                        className="w-full bg-gradient-to-r cursor-pointer from-green-600 to-green-500 text-white py-3 sm:py-4 px-6 rounded-xl hover:from-green-700 hover:to-green-600 transition-all duration-300 font-semibold text-base sm:text-lg mt-6 sm:mt-8 shadow-lg shadow-green-900/50 hover:shadow-xl hover:shadow-green-900/70 disabled:opacity-50"
                                     >
                                         {isSubmitting ? 'Submitting...' : settings.registrationEnabled ? 'Complete Registration' : 'Registration Closed'}
                                     </button>
