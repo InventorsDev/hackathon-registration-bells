@@ -21,7 +21,7 @@ export function RegistrationSuccessPopup({ isOpen, onClose, registrationId }: Re
     const handleInviteFriend = () => {
         const shareUrl = window.location.href;
         const text = encodeURIComponent(
-            `🚀 Join the NACOS Hackathon !\n\n` +
+            `🚀 Join the NACOS Pitchathon !\n\n` +
             `💻 Build innovative solutions\n` +
             `🏆 Win amazing prizes\n` +
             `📅 November 10-12, ${currentYear}\n` +
@@ -70,11 +70,11 @@ export function RegistrationSuccessPopup({ isOpen, onClose, registrationId }: Re
                                         as="h3"
                                         className="mt-4 text-xl font-semibold leading-6 text-white"
                                     >
-                                        Hackathon Registration Successful!
+                                        Pitchathon Registration Successful!
                                     </Dialog.Title>
                                     <div className="mt-2">
                                         <p className="text-sm text-gray-300">
-                                            Thank you for registering for the NACOS Hackathon! Please save your registration ID.
+                                            Thank you for registering for the NACOS Pitchathon! Please save your registration ID.
                                         </p>
                                     </div>
                                 </div>
@@ -117,7 +117,7 @@ export function RegistrationSuccessPopup({ isOpen, onClose, registrationId }: Re
                                                     <FaWhatsapp className="text-2xl" />
                                                 </div>
                                                 <div className="text-start pl-8">
-                                                    <span className="block font-bold text-base">Join Hackathon Group</span>
+                                                    <span className="block font-bold text-base">Join Pitchathon Group</span>
                                                     <span className="text-xs opacity-90">Get updates & connect with participants</span>
                                                 </div>
                                                 <div className="absolute right-4 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -157,7 +157,7 @@ export function RegistrationSuccessPopup({ isOpen, onClose, registrationId }: Re
 
                                         <div className="mt-4 bg-black/50 rounded-lg p-3 border border-green-500/20">
                                             <p className="text-xs text-green-300 text-center leading-relaxed">
-                                                Join our vibrant community of innovators! Get instant updates about the hackathon schedule,
+                                                Join our vibrant community of innovators! Get instant updates about the pitchathon schedule,
                                                 resources, and connect with fellow participants. 🚀
                                             </p>
                                         </div>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { FaClock, FaBookmark, FaMapMarkerAlt, FaLock, FaWhatsapp, FaCode, FaTrophy, FaUsers, FaTwitter, FaInstagram, FaLinkedin, FaGithub } from 'react-icons/fa';
+import { FaClock, FaBookmark, FaMapMarkerAlt, FaLock, FaWhatsapp, FaCode, FaTrophy, FaUsers, FaTwitter, FaInstagram, FaLinkedin, FaGithub, FaTiktok } from 'react-icons/fa';
 import { db } from '../services/firebase';
 import { toast } from 'react-hot-toast';
 import { generateRegistrationId, currentYear } from '../utils/helpers';
@@ -24,7 +24,7 @@ interface RegistrationFormData {
     teamSize: string;
     memberDetails: string;
     projectIdea: string;
-    videoLink: string;
+    proposalLink: string;
     skills: string[];
     registrationId?: string;
     verified?: boolean;
@@ -44,12 +44,12 @@ export function HackathonRegistration() {
         phoneNumber: '',
         institution: 'Bells University of Technology',
         teamName: '',
-        teamSize: '3',
+        teamSize: '2',
         memberDetails: '',
         projectIdea: '',
         skills: [],
         areasOfAssistance: [],
-        videoLink: ""
+        proposalLink: ""
     });
     // const [formData, setFormData] = useState<RegistrationFormData>({
     //     fullName: '',
@@ -183,12 +183,12 @@ export function HackathonRegistration() {
                 // matricNumber: '',
                 // level: '',
                 teamName: '',
-                teamSize: '3',
+                teamSize: '2',
                 memberDetails: '',
                 projectIdea: '',
                 skills: [],
                 areasOfAssistance: [],
-                videoLink: ''
+                proposalLink: ''
             });
             toast.success('Registration successful!');
         } catch (error) {
@@ -216,8 +216,8 @@ export function HackathonRegistration() {
         try {
             if (navigator && navigator.share) {
                 await navigator.share({
-                    title: `NACOS Hackathon ${currentYear}`,
-                    text: `Join the NACOS Hackathon ${currentYear}! Code. Innovate. Transform.`,
+                    title: `NACOS Pitchathon ${currentYear}`,
+                    text: `Join the NACOS Pitchathon ${currentYear}! Pitch. Innovate. Transform.`,
                     url: window.location.href,
                 });
                 toast.success('Thanks for sharing!');
@@ -262,8 +262,10 @@ export function HackathonRegistration() {
                                         initial={{ scale: 0.5, opacity: 0 }}
                                         animate={{ scale: 1, opacity: 1 }}
                                         transition={{ delay: 1.0, duration: 0.7 }}
-                                        className="mb-6"
+                                        className="mb-6 flex sm:flex-col lg:flex-row items-center gap-4"
                                     >
+                                        <img src="/bot.png" alt="Bot Logo" className="size-14 rounded-full p-1 shadow-md object-contain w-36 h-36" />
+                                        <p className="font-bold text-white text-3xl">×</p>
                                         <img src="/nacos-logo.png" alt="NACOS Logo" className="w-28 h-28" />
                                     </motion.div>
 
@@ -282,7 +284,7 @@ export function HackathonRegistration() {
                                         animate={{ scale: 1, opacity: 1 }}
                                         transition={{ delay: 2.0, duration: 0.7 }}
                                     >
-                                        NACOS HACKATHON {currentYear}
+                                        NACOS PITCHATHON {currentYear}
                                     </motion.div>
 
                                     <motion.div
@@ -291,7 +293,7 @@ export function HackathonRegistration() {
                                         animate={{ opacity: 1 }}
                                         transition={{ delay: 2.3, duration: 0.7 }}
                                     >
-                                        {['CODE', 'INNOVATE', 'TRANSFORM'].map((word, index) => (
+                                        {['PITCH', 'INNOVATE', 'TRANSFORM'].map((word, index) => (
                                             <motion.div
                                                 key={word}
                                                 className="px-4 py-2 bg-green-600 text-white rounded-md font-bold"
@@ -330,12 +332,14 @@ export function HackathonRegistration() {
                             </div>
                             <div>
                                 <h1 className="text-5xl sm:text-3xl md:text-4xl font-bold mb-3 bg-gradient-to-r from-white to-green-400 bg-clip-text text-transparent">
-                                    {hackathonName} Hackathon {currentYear}
+                                    {hackathonName} Pitchathon {currentYear}
                                 </h1>
-                                <p className="text-base sm:text-lg text-white/90 font-medium mb-2">Code. Innovate. Transform.</p>
+                                <p className="text-base sm:text-lg text-white/90 font-medium mb-2">Pitch. Innovate. Transform.</p>
                                 <div className="bg-white/5 backdrop-blur-sm rounded-xl p-3 sm:p-4 mt-4 border border-white/10">
                                     <p className="text-white/90 text-xs sm:text-sm leading-relaxed">
-                                        Join the largest student hackathon for computing students across Nigeria. Build innovative solutions and win amazing prizes!
+                                        Exploring Innovation for all: Think it ... Pitch it.
+                                        <span className="text-green-600 font-semibold px-2">₦1,000,000+ cash prices to be won</span>
+                                        {/* Join the largest student event for computing students across Nigeria. Build innovative solutions and win amazing prizes! */}
                                     </p>
                                 </div>
                             </div>
@@ -407,8 +411,7 @@ export function HackathonRegistration() {
                                         <div>
                                             <h3 className="font-semibold text-lg">Theme</h3>
                                             <p className='text-white/80 text-sm'>
-                                                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sed hic itaque provident a quibusdam. 
-                                                Perspiciatis ex laudantium explicabo molestiae optio fugit illum consectetur, officia quos sapiente iste nam nihil repellendus!
+                                                Exploring Innovation for all: Think it ... Pitch it.
                                             </p>
                                         </div>
                                     </div>
@@ -449,7 +452,7 @@ export function HackathonRegistration() {
                                             <h3 className="font-semibold text-lg">Eligibility</h3>
                                             <p className="text-white/80 text-sm">All Levels (100-500)
                                                 <br /> from any Departments</p>
-                                            <p className="text-white/80 text-sm">Teams of 3-4 students</p>
+                                            <p className="text-white/80 text-sm">Teams of 2-4 students</p>
                                         </div>
                                     </div>
                                 </div>
@@ -669,6 +672,7 @@ export function HackathonRegistration() {
                                             required
                                         >
                                             {/* <option value="1" className="bg-black">Individual (1 person)</option> */}
+                                            <option value="2" className="bg-black">2 members</option>
                                             <option value="3" className="bg-black">3 members</option>
                                             <option value="4" className="bg-black">4 members</option>
                                         </select>
@@ -679,12 +683,12 @@ export function HackathonRegistration() {
 
                                     <div className="space-y-3">
                                         <label className="text-sm font-medium text-white">
-                                            Member Details (Name & email) <span className="text-red-400">*</span>
+                                            Member Details (Name, email & phone per member) <span className="text-red-400">*</span>
                                         </label>
                                         <textarea
                                             value={formData.memberDetails}
                                             onChange={(e) => setFormData({ ...formData, memberDetails: e.target.value })}
-                                            placeholder="Enter name, email & phone number for each member separated by comma in the format: John Doe - johndoe@example.com - 09029200000, Jon Snow - jon.snow@example.com - 09029200001, etc"
+                                            placeholder="Enter name, email & phone number for each member separated by comma in the format: Robb Stark - robb@example.com - 09029200000, Jon Snow - jon.snow@example.com - 09029200001, etc"
                                             className="w-full px-4 py-3 rounded-xl bg-white/10 border-2 border-white/20 text-white placeholder-gray-400 focus:border-green-500 focus:ring-green-500/20 transition-all min-h-[100px]"
                                             required
                                         />
@@ -692,13 +696,13 @@ export function HackathonRegistration() {
 
                                     <div className="space-y-3">
                                         <label className="text-sm font-medium text-white">
-                                            Project Idea <span className="text-red-400">*</span>
+                                            Project Name <span className="text-red-400">*</span>
                                         </label>
-                                        <textarea
+                                        <input
                                             value={formData.projectIdea}
                                             onChange={(e) => setFormData({ ...formData, projectIdea: e.target.value })}
-                                            placeholder="Briefly describe your project idea"
-                                            className="w-full px-4 py-3 rounded-xl bg-white/10 border-2 border-white/20 text-white placeholder-gray-400 focus:border-green-500 focus:ring-green-500/20 transition-all min-h-[100px]"
+                                            placeholder="Input your project name"
+                                            className="w-full px-4 py-3 rounded-xl bg-white/10 border-2 border-white/20 text-white placeholder-gray-400 focus:border-green-500 focus:ring-green-500/20 transition-all"
                                             required
                                         />
                                     </div>
@@ -710,7 +714,7 @@ export function HackathonRegistration() {
                                         <textarea
                                             value={formData.skills.join(', ')}
                                             onChange={(e) => setFormData({ ...formData, skills: e.target.value.split(',').map(s => s.trim()) })}
-                                            placeholder="Enter your skills separated by commas (e.g., React, Node.js, UI/UX Design)"
+                                            placeholder="Enter your skills separated by commas (e.g., Project Management, design, marketing, tailoring, programming, etc)"
                                             className="w-full px-4 py-3 rounded-xl bg-white/10 border-2 border-white/20 text-white placeholder-gray-400 focus:border-green-500 focus:ring-green-500/20 transition-all min-h-[100px]"
                                             required
                                         />
@@ -718,13 +722,13 @@ export function HackathonRegistration() {
 
                                     <div className="space-y-3">
                                         <label className="text-sm font-medium text-white">
-                                            Link to Presentation Video <span className="text-red-400">*</span>
+                                            Link to Pitch Deck / Project Proposal <span className="text-red-400">*</span>
                                         </label>
                                         <input
                                             type="url"
-                                            value={formData.videoLink}
-                                            onChange={(e) => setFormData({ ...formData, videoLink: e.target.value })}
-                                            placeholder="Submit link to video presentation (max. 2mins) talking about the project idea (e.g., use Loom or YouTube)"
+                                            value={formData.proposalLink}
+                                            onChange={(e) => setFormData({ ...formData, proposalLink: e.target.value })}
+                                            placeholder="Submit link to Google drive hosted pitch deck / project proposal"
                                             className="w-full px-4 py-3 rounded-xl bg-white/10 border-2 border-white/20 text-white placeholder-gray-400 focus:border-green-500 focus:ring-green-500/20 transition-all"
                                             required
                                         />
@@ -750,9 +754,9 @@ export function HackathonRegistration() {
                                         </p>
                                         <ul className="list-disc pl-8 space-y-1">
                                             <li>A team will be registered by the team lead who fills in the details of other members.</li>
-                                            <li>A team should consist of 3-4 members including team lead.</li>
-                                            <li>A team should ideally consist of software engineers, designers and a project manager.</li>
-                                            <li>The video submission should be a link to a presentation video using loom (max. 2mins) </li>
+                                            <li>A team should consist of 2-4 members including team lead.</li>
+                                            <li>A team can consist of business owners, software engineers, designers, a project manager and any other interested parties.</li>
+                                            <li>The proposal submission should be a document describing the project idea in details</li>
                                         </ul>
                                     </div>
 
@@ -762,7 +766,7 @@ export function HackathonRegistration() {
                                             <span>
                                                 <strong>Important:</strong> After registration, join our WhatsApp group for updates and important announcements.
                                                 Team leads should also share the WhatsApp link to other members of their team to ensure everyone stays informed.
-                                                Wish you productive efforts through this hackathon, stay hacking! 😉
+                                                Wish you productive efforts through this pitchathon, stay active! 😉
                                             </span>
                                         </p>
                                     </div>
@@ -791,9 +795,9 @@ export function HackathonRegistration() {
                     >
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                             <div className="space-y-6 backdrop-blur-sm bg-white/5 p-6 rounded-2xl border border-white/10 shadow-xl">
-                                <h3 className="text-white text-2xl font-bold">Join the NACOS Hackathon Community</h3>
+                                <h3 className="text-white text-2xl font-bold">Join the NACOS Community</h3>
                                 <p className="text-white/70">
-                                    Be part of Nigeria's largest student hackathon and showcase your innovation skills! Connect with like-minded students, mentors, and industry professionals.
+                                    Be part of Nigeria's largest student event and showcase your innovation skills! Connect with like-minded students, mentors, and industry professionals.
                                 </p>
                                 <div className="flex flex-wrap gap-3 mt-4">
                                     <a href={settings.whatsappLink} className="flex items-center gap-2 bg-gradient-to-r from-green-500/90 to-green-600/90 hover:from-green-600 hover:to-green-700 transition-all px-4 py-2 rounded-lg text-white font-medium shadow-lg shadow-green-500/20 backdrop-blur-sm">
@@ -864,14 +868,14 @@ export function HackathonRegistration() {
                         <div className="mt-12 py-8 bg-black/40 backdrop-blur-lg border-t border-white/10 rounded-t-3xl flex flex-col md:flex-row justify-between items-center px-6">
                             <div className="flex items-center gap-4 mb-6 md:mb-0">
                                 <div className="flex flex-col">
-                                    <span className="text-white font-bold">NACOS Hackathon</span>
+                                    <span className="text-white font-bold">NACOS Pitchathon</span>
                                     <span className="text-white/50 text-sm">© {currentYear} All rights reserved</span>
                                 </div>
                             </div>
 
                             <div className="flex gap-6 mb-6 md:mb-0">
                                 <a href={settings.socialLinks.twitter} className="text-white/70 hover:text-white transition-colors bg-white/10 p-2 rounded-full hover:bg-white/20">
-                                    <FaTwitter size={18} />
+                                    <FaTiktok size={18} />
                                 </a>
                                 <a href={settings.socialLinks.instagram} className="text-white/70 hover:text-white transition-colors bg-white/10 p-2 rounded-full hover:bg-white/20">
                                     <FaInstagram size={18} />

@@ -65,7 +65,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
                 <div className="flex flex-col h-full p-4">
                     <div className="flex items-center gap-3 mb-8">
                         <img src="/logo.png" alt="logo" className="w-8 h-8" />
-                        <h1 className="font-bold text-gray-800">NACOS Hackathon Admin</h1>
+                        <h1 className="font-bold text-gray-800">NACOS Pitchathon Admin</h1>
                     </div>
                     <nav className="space-y-1 flex-1 overflow-y-auto">
                         {menuItems.map((item) => (

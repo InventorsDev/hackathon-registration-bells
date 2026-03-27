@@ -13,7 +13,7 @@ interface Registration {
     skills: string[];
     projectIdea: string;
     memberDetails: string;
-    videoLink: string;
+    proposalLink: string;
 }
 
 export function Teams() {
@@ -143,14 +143,14 @@ export function Teams() {
                                     </div>
                                     
                                     <div className='my-2'>
-                                        <h4 className="text-sm font-medium text-gray-500 mb-2">Presentation Video</h4>
+                                        <h4 className="text-sm font-medium text-gray-500 mb-2">Proposal Link</h4>
                                         <div className="flex flex-wrap gap-2">
                                             {members.map((member) => (
                                                 <a 
-                                                    key={member.id} href={member.videoLink} target="_blank" rel="noopener noreferrer"
+                                                    key={member.id} href={member.proposalLink} target="_blank" rel="noopener noreferrer"
                                                     className='text-xs text-blue-600 hover:underline'
                                                 >
-                                                    {member.videoLink}
+                                                    {member.proposalLink}
                                                 </a>
                                             ))}
                                         </div>
